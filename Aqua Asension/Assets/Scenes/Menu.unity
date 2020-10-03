@@ -3409,6 +3409,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CanvasMainMenu: {fileID: 1948934111}
+  CanvasLoad: {fileID: 73115364}
+  GameNumbers: {fileID: 801753391}
 --- !u!1 &1948934111
 GameObject:
   m_ObjectHideFlags: 0

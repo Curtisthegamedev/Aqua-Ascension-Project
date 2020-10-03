@@ -6,8 +6,6 @@ using TMPro;
 
 public class Launch : MonoBehaviourPunCallbacks
 {
-
-
     [SerializeField] GameObject CanvasMainMenu;
     [SerializeField] GameObject CanvasLoad;
     [SerializeField] GameObject GameNumbers;
@@ -33,7 +31,7 @@ public class Launch : MonoBehaviourPunCallbacks
 
     public void CreateRoom()
     {
-        PhotonNetwork.CreateRoom(GameNumbers.GetComponentInParent<TextMeshPro>());
+        PhotonNetwork.CreateRoom(GameNumbers.GetComponentInParent<TextMeshProUGUI>().text);
     }
 
     public override void OnJoinedRoom()
