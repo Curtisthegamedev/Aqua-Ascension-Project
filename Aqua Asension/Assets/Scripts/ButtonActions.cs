@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class ButtonActions : MonoBehaviour
 {
     //Variables 
     [SerializeField] GameObject canvasMainMenu;
     [SerializeField] GameObject canvasCreateLobby;
     [SerializeField] GameObject canvasJoinLobby;
+     
     public void CreateLobby()
     {
         canvasMainMenu.SetActive(false);
