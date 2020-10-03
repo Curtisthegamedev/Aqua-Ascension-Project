@@ -15,14 +15,14 @@ public class OnlineNameHandler : MonoBehaviour
 
     private void Update()
     {
-        JoinButton.interactable = !string.IsNullOrEmpty(PlayerOnlineNickname.text);
-        CreateLobbyButton.interactable = !string.IsNullOrEmpty(PlayerOnlineNickname.text);
+        JoinButton.interactable = !string.IsNullOrEmpty(PlayerOnlineNickname.text) && PlayerNameSet;
+        CreateLobbyButton.interactable = !string.IsNullOrEmpty(PlayerOnlineNickname.text) && PlayerNameSet;
     }
 
     public void SetPlayerName()
     {
-        PhotonNetwork.NickName = PlayerOnlineNickname.text; 
-
+        PhotonNetwork.NickName = PlayerOnlineNickname.text;
+        PlayerNameSet = true; 
     }
 
 
