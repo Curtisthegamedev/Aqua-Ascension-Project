@@ -19,6 +19,9 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs: []
-    m_Floats: []
-    m_Colors: []
+    m_Floats:
+    - Vector1_92F33080: 2
+    m_Colors:
+    - Color_A354D38A: {r: 1.066667, g: 1.215686, b: 2, a: 0}
+    - Color_E89DFA58: {r: 0.461641, g: 0.50910777, b: 0.99056596, a: 0}
   m_BuildTextureStacks: []
