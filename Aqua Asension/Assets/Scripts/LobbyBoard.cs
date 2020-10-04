@@ -7,18 +7,33 @@ using Photon.Pun;
 
 public class LobbyBoard : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI PlayerOneName;
+    //[SerializeField] TextMeshProUGUI PlayerOneName;
+    //[SerializeField] TextMeshProUGUI PlayerTwoName;
+    //[SerializeField] TextMeshProUGUI PlayerThreeName;
+    //[SerializeField] TextMeshProUGUI playerFourName;
+
+    [SerializeField] TextMeshProUGUI[] PlayerNameSlots; 
+    private string PlayerNameDefaultText; 
+
+    private enum NameSlots
+    {
+        One, 
+        Two, 
+        Three, 
+        Four
+    }
 
     private void Start()
     {
-        if(PhotonNetwork.NickName != "" && PlayerOneName.text != "Player Name")
+        PlayerNameDefaultText = "Player Name";
+
+        for(int i = 0; i <= 4; i++)
         {
-            PlayerOneName.text = PhotonNetwork.NickName;
+            if(PlayerNameSlots[i].text == PlayerNameDefaultText)
+            {
+                PlayerNameSlots[i].text = PhotonNetwork.NickName;
+                i = 5; 
+            }
         }
-        else
-        {
-            PlayerOneName.text = "Error"; 
-        }
-        
     }
 }
