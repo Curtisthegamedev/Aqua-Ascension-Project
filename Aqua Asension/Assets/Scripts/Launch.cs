@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class Launch : MonoBehaviourPunCallbacks
 {
@@ -12,55 +13,92 @@ public class Launch : MonoBehaviourPunCallbacks
     [SerializeField] GameObject canvasCreateLobby;
     [SerializeField] GameObject canvasJoinLobby;
 
+    [SerializeField] GameObject enterNamePanel;
+
+    public string nickname { get; set; } 
+
     private void Start()
     {
+        nickname = PlayerPrefs.GetString("Gamesettings_Nickname", "");
+        if(!string.IsNullOrEmpty(nickname))
+            ConnectToServer(nickname);
+        else 
+            enterNamePanel.SetActive(true);
+    }
+
+    private void ConnectToServer(string nickname)
+    {
         Debug.Log("Attempting to connect to server...");
+        PhotonNetwork.NickName = nickname;
         PhotonNetwork.GameVersion = GameManager.Active.Settings.Version;
-        PhotonNetwork.NickName = GameManager.Active.Settings.NickName;
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    private void CreateRoom()
+    {
+        if(!PhotonNetwork.IsConnected) return;
+
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = 3; // TODO : Change this to a higher player count;
+        PhotonNetwork.CreateRoom(null, options, null);
+    }
+
+    ///////////////////////////////////
+    /// PUN Callbacks
+    /////////////////////////////////
+
     public override void OnConnectedToMaster()
     {
-        base.OnConnectedToMaster();
         Debug.Log("Connected to server.");
         Debug.Log($"Player Connected: {PhotonNetwork.LocalPlayer.NickName}");
-        PhotonNetwork.JoinLobby();
+        
+        //Connect To Random Room
+        PhotonNetwork.JoinRandomRoom();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("Disconnected from server: " + cause.ToString());
+        PlayerPrefs.Save();
     }
 
     public override void OnJoinedLobby()
     {
-        Debug.Log("joined lobby");
+        Debug.Log("Connected to lobby.");
         canvasLoad.SetActive(false);
         canvasMainMenu.SetActive(true);
     }
 
-    public void CreateRoom()
-    {
-        PhotonNetwork.CreateRoom(gameNumbers.GetComponentInParent<TextMeshProUGUI>().text);
-    }
-
     public override void OnJoinedRoom()
     {
+        Debug.Log("Connected to room.");
 
+        var names = PhotonNetwork.CurrentRoom.Players.Select(elem => elem.Value.NickName).ToArray();
+        Debug.Log("Number of Players Connected: " + names.Length);
+
+        foreach(var name in names)
+        {
+            Debug.Log(name);
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        base.OnCreateRoomFailed(returnCode, message);
+        Debug.LogError("Failed To create room: " + message, this.gameObject);
+        
+        // TODO: Present Error To User...
+        Application.Quit();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        base.OnJoinRandomFailed(returnCode, message);
+        Debug.LogWarning("Failed to join random room: " + message);
+        CreateRoom();
     }
 
+    ///////////////////////////////////
     /// Actions
+    /////////////////////////////////
 
     public void CreateLobbyAction()
     {
@@ -84,14 +122,52 @@ public class Launch : MonoBehaviourPunCallbacks
         SceneManager.LoadScene("Lobby");
     }
 
-    //  Misc
+    public void ValidateAndConnectToServerAction()
+    {
+        if(!IsValidName(nickname))
+        {
+            Debug.LogWarning("Name is not longer than 4 characters.");
+            return;
+        }
+
+        string namehash;
+        int temp = 0;
+        do{
+            namehash = nickname + "#" + GenerateHash();
+        } while(!IsNameAvailable(namehash) && temp++ < 9999);
+
+        if(temp > 9999)
+        {
+            Debug.LogWarning("Name + Hash is not available", this.gameObject);
+            return;
+        }
+
+        PlayerPrefs.SetString("Gamesettings_Nickname", namehash);
+
+        enterNamePanel.SetActive(false);
+        ConnectToServer(namehash);
+    }
+
+    ///////////////////////////////////
+    /// Misc
+    /////////////////////////////////
 
     /// <summary>
-    /// NOTE: ONLY CALL THIS ONCE!
+    /// Generates a String 4 Digit Hash.
     /// </summary>
-    /// <returns>Generated a String 4 Digit Hash</returns>
     protected string GenerateHash()
     {
         return Random.Range(0, 9999).ToString("D4"); 
+    }
+
+    // TODO: Check if name is not offensive...or...not...
+    protected bool IsValidName(string name)
+    {
+        return name.Length > 3;
+    }
+
+    protected bool IsNameAvailable(string name)
+    {
+        return true;
     }
 }
