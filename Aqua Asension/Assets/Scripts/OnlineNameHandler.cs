@@ -24,6 +24,4 @@ public class OnlineNameHandler : MonoBehaviour
         PhotonNetwork.NickName = PlayerOnlineNickname.text;
         PlayerNameSet = true; 
     }
-
-
 }

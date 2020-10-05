@@ -2,7 +2,7 @@
 
 namespace AquaAscension.Utils
 {
-    public class DontDestroyOnLoad : MonoBehaviour
+    public class Persist : MonoBehaviour
     {
         private void Awake()
         {
