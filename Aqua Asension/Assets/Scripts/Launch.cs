@@ -111,9 +111,9 @@ public class Launch : MonoBehaviourPunCallbacks
         foreach(var name in names)
         {
             Debug.Log(name);
+            playerNicknames.Add(name);
         }
 
-        playerNicknames.Add(nickname);
         OnPlayerlistChanged();
     }
 
