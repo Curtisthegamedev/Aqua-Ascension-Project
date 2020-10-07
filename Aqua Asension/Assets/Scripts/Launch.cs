@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -14,6 +16,10 @@ public class Launch : MonoBehaviourPunCallbacks
     [SerializeField] GameObject canvasJoinLobby;
 
     [SerializeField] GameObject enterNamePanel;
+    [SerializeField] GameObject playerListPanel;
+    [SerializeField] RectTransform playerListPrefab;
+
+    List<string> playerNicknames = new List<string>();
 
     public string nickname { get; set; } 
 
@@ -41,6 +47,25 @@ public class Launch : MonoBehaviourPunCallbacks
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = 3; // TODO : Change this to a higher player count;
         PhotonNetwork.CreateRoom(null, options, null);
+    }
+
+    private void OnPlayerlistChanged()
+    {
+        ClearPlayerList();
+        for(var i = 0; i < playerNicknames.Count; i++)
+        {
+            var playerList = Instantiate(playerListPrefab, playerListPanel.transform);
+            playerList.localPosition = new Vector3(playerList.position.x, playerListPrefab.sizeDelta.y * i, playerList.position.z);
+            playerList.GetComponentInChildren<TextMeshProUGUI>().text = playerNicknames[i];
+        }
+    }
+
+    private void ClearPlayerList()
+    {
+        foreach(Transform child in playerListPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     ///////////////////////////////////
@@ -80,6 +105,9 @@ public class Launch : MonoBehaviourPunCallbacks
         {
             Debug.Log(name);
         }
+
+        playerNicknames.Add(nickname);
+        OnPlayerlistChanged();
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -94,6 +122,29 @@ public class Launch : MonoBehaviourPunCallbacks
     {
         Debug.LogWarning("Failed to join random room: " + message);
         CreateRoom();
+    }
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player player)
+    {
+        Debug.Log("Player Entered Room...");
+        playerNicknames.Add(player.NickName);
+        OnPlayerlistChanged();
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player player)
+    {
+        Debug.Log("Player Left Room...");
+        playerNicknames.Remove(player.NickName);
+        OnPlayerlistChanged();
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        Debug.Log("On Room List Updated...");
+        // foreach(RoomInfo info in roomList)
+        // {
+
+        // }
     }
 
     ///////////////////////////////////
