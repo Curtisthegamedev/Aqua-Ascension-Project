@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class LinearMovment : MonoBehaviour
 {
-    public float speed;
-    public float start;
-   
+    //This will reprisent endpointOne for Par 2 and endpointTwo for Par.
+    [SerializeField] Transform endpoint;
+    private float angularVel = 45.0f; 
 
+    private float velosity = 2.5f;
 
 
     // Start is called before the first frame update
@@ -22,10 +23,10 @@ public class LinearMovment : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //     transform.position += new Vector3(start, 0, 0).normalized * speed * Time.deltaTime;
+        //Movement physics
+        transform.position = Vector3.MoveTowards(transform.position, endpoint.transform.position, Time.deltaTime * velosity); 
 
-        transform.position += new Vector3((start ), 0, 0).normalized * speed * Time.deltaTime;
-
+        //Rotation phisics
 
 
     }
