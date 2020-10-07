@@ -15,8 +15,11 @@ public class Launch : MonoBehaviourPunCallbacks
     [SerializeField] GameObject canvasCreateLobby;
     [SerializeField] GameObject canvasJoinLobby;
 
-    [SerializeField] GameObject enterNamePanel;
-    [SerializeField] GameObject playerListPanel;
+    [SerializeField] RectTransform enterNamePanel;
+    [SerializeField] RectTransform playerListPanel;
+    [SerializeField] RectTransform playerListContainer;
+
+    [Header("Prefabs")]
     [SerializeField] RectTransform playerListPrefab;
 
     List<string> playerNicknames = new List<string>();
@@ -25,11 +28,13 @@ public class Launch : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        playerListContainer.gameObject.SetActive(false);
+
         nickname = PlayerPrefs.GetString("Gamesettings_Nickname", "");
         if(!string.IsNullOrEmpty(nickname))
             ConnectToServer(nickname);
         else 
-            enterNamePanel.SetActive(true);
+            enterNamePanel.gameObject.SetActive(true);
     }
 
     private void ConnectToServer(string nickname)
@@ -55,7 +60,7 @@ public class Launch : MonoBehaviourPunCallbacks
         for(var i = 0; i < playerNicknames.Count; i++)
         {
             var playerList = Instantiate(playerListPrefab, playerListPanel.transform);
-            playerList.localPosition = new Vector3(playerList.position.x, playerListPrefab.sizeDelta.y * i, playerList.position.z);
+            playerList.anchoredPosition = new Vector2(0, (-50 * i) - 25);
             playerList.GetComponentInChildren<TextMeshProUGUI>().text = playerNicknames[i];
         }
     }
@@ -96,6 +101,8 @@ public class Launch : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        playerListContainer.gameObject.SetActive(true);
+
         Debug.Log("Connected to room.");
 
         var names = PhotonNetwork.CurrentRoom.Players.Select(elem => elem.Value.NickName).ToArray();
@@ -195,7 +202,7 @@ public class Launch : MonoBehaviourPunCallbacks
 
         PlayerPrefs.SetString("Gamesettings_Nickname", namehash);
 
-        enterNamePanel.SetActive(false);
+        enterNamePanel.gameObject.SetActive(false);
         ConnectToServer(namehash);
     }
 
