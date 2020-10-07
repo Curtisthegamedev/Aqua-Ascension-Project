@@ -1,11 +1,25 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEditor;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Linq;
+
+[CustomEditor(typeof(Launch))]
+public class LaunchEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        GUILayout.Space(10);
+
+        if(GUILayout.Button("Reset Player Prefs"))
+            PlayerPrefs.DeleteKey("Gamesettings_Nickname");
+    }
+}
 
 public class Launch : MonoBehaviourPunCallbacks
 {
