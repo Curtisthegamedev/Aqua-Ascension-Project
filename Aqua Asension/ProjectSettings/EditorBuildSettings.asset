@@ -8,10 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Menu.unity
-    guid: bcdc221c8a239d442b4ccf3494a9550e
-  - enabled: 1
+    path: Assets/Scenes/Menu_Juriel/Menu_Juriel.unity
+    guid: 8776956f677c8be4bad89ac7210f2356
+  - enabled: 0
     path: Assets/Scenes/Lobby.unity
     guid: d4f0d5d44c775014daaf0cebb4623aca
   m_configObjects: {}
