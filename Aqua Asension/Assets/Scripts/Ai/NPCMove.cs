@@ -7,12 +7,20 @@ public class NPCMove : MonoBehaviour
 {
 
     [SerializeField] Transform _destination;
+    [SerializeField] Transform Player;
+
+    bool fine = false;
 
     NavMeshAgent _navMeshAgent;
 
     // Start is called before the first frame update
     void Start()
     {
+
+
+
+
+
         _navMeshAgent = this.GetComponent<NavMeshAgent>();
 
         if (_navMeshAgent == null)
@@ -23,14 +31,55 @@ public class NPCMove : MonoBehaviour
         }
 
         else {
+           
+           
+        }
+    }
 
+
+    private void Update()
+    {
+        if (fine == true)
+        {
+
+
+        }
+        else
+        {
             SetDestination();
         }
     }
 
-   private void SetDestination()
-    {
 
+
+
+    void OnTriggerEnter  (Collider collision)
+    {
+        
+
+            if (collision.gameObject.CompareTag("Player"))
+            {
+            
+            
+
+            fine = true;
+
+                Vector3 targetVector = Player.transform.position;
+                _destination = null;
+            }
+
+        
+ 
+
+
+    }
+
+
+
+
+    void SetDestination()
+    {
+        
         if(_destination != null)
         {
 
