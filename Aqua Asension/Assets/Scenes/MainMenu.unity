@@ -1188,7 +1188,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86eb9a52e5e058c4b8f357da5e7280d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textDisplay: {fileID: 925197236}
 --- !u!4 &458926238
 Transform:
   m_ObjectHideFlags: 0
@@ -1962,10 +1961,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameNumbers: {fileID: 0}
-  canvasLoad: {fileID: 0}
+  canvasLoad: {fileID: 1689954065}
   canvasMainMenu: {fileID: 508446970}
   canvasCreateLobby: {fileID: 445704957}
   canvasJoinLobby: {fileID: 1078445061}
+  enterNamePanel: {fileID: 105181209}
 --- !u!4 &887735620
 Transform:
   m_ObjectHideFlags: 0
