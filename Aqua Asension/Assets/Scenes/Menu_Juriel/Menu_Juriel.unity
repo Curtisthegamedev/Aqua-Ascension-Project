@@ -928,6 +928,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 134117374}
   m_CullTransparentMesh: 0
+<<<<<<< HEAD
 --- !u!1 &228674133
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,6 +972,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
 --- !u!1 &280241867
 GameObject:
   m_ObjectHideFlags: 0
@@ -1719,6 +1722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotator: {x: 0, y: 8, z: 0}
   drag: 0.1
+<<<<<<< HEAD
 --- !u!1 &654648731
 GameObject:
   m_ObjectHideFlags: 0
@@ -1851,6 +1855,8 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654648731}
   m_CullTransparentMesh: 0
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
 --- !u!1 &702417799
 GameObject:
   m_ObjectHideFlags: 0
@@ -2408,8 +2414,11 @@ GameObject:
   - component: {fileID: 887735620}
   - component: {fileID: 887735619}
   - component: {fileID: 887735618}
+<<<<<<< HEAD
   - component: {fileID: 887735621}
   - component: {fileID: 887735617}
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -2417,6 +2426,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!114 &887735617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2429,6 +2439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5da9a6c5da2e5ce4bb003f122ac48996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
 --- !u!114 &887735618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2479,6 +2491,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!114 &887735621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2491,6 +2504,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 074125d13df360b48942d3d1bf6a2384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
 --- !u!1 &925197235
 GameObject:
   m_ObjectHideFlags: 0
@@ -3545,7 +3560,10 @@ RectTransform:
   m_Children:
   - {fileID: 993220434}
   - {fileID: 560957884}
+<<<<<<< HEAD
   - {fileID: 654648732}
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
   m_Father: {fileID: 1622204223}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5846,6 +5864,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907806447}
   m_CullTransparentMesh: 0
+<<<<<<< HEAD
 --- !u!1 &1957282502
 GameObject:
   m_ObjectHideFlags: 0
@@ -5980,3 +5999,5 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957282502}
   m_CullTransparentMesh: 0
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6

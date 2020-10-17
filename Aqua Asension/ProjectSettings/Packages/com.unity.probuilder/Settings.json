@@ -11,7 +11,11 @@
             {
                 "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "editor.toolbarIconGUI",
+<<<<<<< HEAD
                 "value": "{\"m_Value\":false}"
+=======
+                "value": "{\"m_Value\":true}"
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
             },
             {
                 "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",

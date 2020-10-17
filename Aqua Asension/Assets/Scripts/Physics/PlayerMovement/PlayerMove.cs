@@ -7,8 +7,12 @@ public class PlayerMove : MonoBehaviour
     private float speed = 10;
     private float gravity = 8.5f;
     private float jumpForce = 5.0f; 
+<<<<<<< HEAD
     private float verticalVelocity;
     [SerializeField] GameObject WaterEffect; 
+=======
+    private float verticalVelocity; 
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
     private CharacterController controller; 
     Rigidbody rb;
 
@@ -18,6 +22,7 @@ public class PlayerMove : MonoBehaviour
         controller = this.gameObject.GetComponent<CharacterController>(); 
     }
 
+<<<<<<< HEAD
     private void Shoot()
     {
         if(Input.GetKey(KeyCode.E))
@@ -31,11 +36,16 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
     private void Update()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
+<<<<<<< HEAD
         Shoot(); 
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
         if(controller.isGrounded)
         {
             verticalVelocity = -gravity * Time.deltaTime; 
@@ -51,7 +61,10 @@ public class PlayerMove : MonoBehaviour
         }
         Vector3 MoveVector = new Vector3(vertical * speed, verticalVelocity, -horizontal * speed);
         controller.Move(MoveVector * Time.deltaTime); 
+<<<<<<< HEAD
 
         
+=======
+>>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
     }
 }
