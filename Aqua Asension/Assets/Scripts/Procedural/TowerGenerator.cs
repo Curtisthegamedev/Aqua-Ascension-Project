@@ -10,9 +10,6 @@ public enum ConnectionPoint
 // This class generates a tower by procedurally linking rooms together
 public class TowerGenerator : MonoBehaviour
 {
-    
-    public static SortedSet<Room> rooms;
-
     // Start is called before the first frame update
     void Start()
     {
