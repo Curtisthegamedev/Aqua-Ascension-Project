@@ -8,7 +8,9 @@ public class PlayerMove : MonoBehaviour
     private float gravity = 8.5f;
     private float jumpForce = 5.0f; 
     private float verticalVelocity;
-    [SerializeField] GameObject WaterEffect; 
+    [SerializeField] GameObject WaterEffect;
+    //this bullet prefab is temporary and should be replaced with water later on. 
+    [SerializeField] GameObject tempBulletPrefab; 
     private CharacterController controller; 
     Rigidbody rb;
 
@@ -22,12 +24,13 @@ public class PlayerMove : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.E))
         {
-            Debug.Log("mouse button down"); 
-            WaterEffect.SetActive(true); 
+            //Debug.Log("shooting water"); 
+            //WaterEffect.SetActive(true); 
+
         }
         else
         {
-            WaterEffect.SetActive(false); 
+            //WaterEffect.SetActive(false); 
         }
     }
     private void Update()
