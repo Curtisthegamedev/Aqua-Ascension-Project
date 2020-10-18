@@ -12,14 +12,10 @@ public class LobbyBoard : MonoBehaviour
     //[SerializeField] TextMeshProUGUI PlayerThreeName;
     //[SerializeField] TextMeshProUGUI playerFourName;
 
-    [SerializeField] TextMeshProUGUI[] PlayerNameSlots; 
-<<<<<<< HEAD
+    [SerializeField] TextMeshProUGUI[] PlayerNameSlots;
     private string PlayerNameDefaultText;
     private int timer = 5;
     private bool MoreThanOnePlayerInLobby = false; 
-=======
-    private string PlayerNameDefaultText; 
->>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
 
     private enum NameSlots
     {

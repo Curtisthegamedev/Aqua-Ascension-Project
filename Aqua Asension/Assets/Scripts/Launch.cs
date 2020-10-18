@@ -7,10 +7,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
-<<<<<<< HEAD
 #if UNITY_EDITOR
-=======
->>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
 [CustomEditor(typeof(Launch))]
 public class LaunchEditor : Editor
 {
@@ -24,10 +21,7 @@ public class LaunchEditor : Editor
             PlayerPrefs.DeleteKey("Gamesettings_Nickname");
     }
 }
-<<<<<<< HEAD
 #endif
-=======
->>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
 
 public class Launch : MonoBehaviourPunCallbacks
 {
@@ -51,12 +45,8 @@ public class Launch : MonoBehaviourPunCallbacks
     private void Start()
     {
         playerListContainer.gameObject.SetActive(false);
-<<<<<<< HEAD
         PhotonNetwork.AutomaticallySyncScene = true;
-        Debug.Log("photon Scene Sync is on"); 
-=======
-
->>>>>>> 754e70c44158e2b130b387ffb5bc6ea54d2286b6
+        Debug.Log("photon Scene Sync is on");
         nickname = PlayerPrefs.GetString("Gamesettings_Nickname", "");
         if(!string.IsNullOrEmpty(nickname))
             ConnectToServer(nickname);
