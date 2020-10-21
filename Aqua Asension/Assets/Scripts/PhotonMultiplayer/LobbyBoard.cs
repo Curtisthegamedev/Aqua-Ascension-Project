@@ -7,10 +7,6 @@ using Photon.Pun;
 
 public class LobbyBoard : MonoBehaviour
 {
-    //[SerializeField] TextMeshProUGUI PlayerOneName;
-    //[SerializeField] TextMeshProUGUI PlayerTwoName;
-    //[SerializeField] TextMeshProUGUI PlayerThreeName;
-    //[SerializeField] TextMeshProUGUI playerFourName;
 
     [SerializeField] TextMeshProUGUI[] PlayerNameSlots;
     private string PlayerNameDefaultText;
