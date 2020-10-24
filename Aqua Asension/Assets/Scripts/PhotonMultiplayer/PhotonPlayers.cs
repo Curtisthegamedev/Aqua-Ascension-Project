@@ -12,12 +12,13 @@ public class PhotonPlayers : MonoBehaviour
     private void Start()
     { 
         playerPhotonView = this.gameObject.GetComponent<PhotonView>();
-        int RandomSpawn = Random.Range(0, Setup.setup.spawnPoints.Length); 
+       /* int RandomSpawn = Random.Range(0, Setup.setup.spawnPoints.Length); 
         if(playerPhotonView.IsMine)
         {
             PlayerAvatar = PhotonNetwork.Instantiate(Path.Combine("Prefabs", "PhotonNetworkSpawn.prefab"), 
                 Setup.setup.spawnPoints[RandomSpawn].position, Setup.setup.spawnPoints[RandomSpawn].rotation, 0); 
         }
+        */
     }
 
 

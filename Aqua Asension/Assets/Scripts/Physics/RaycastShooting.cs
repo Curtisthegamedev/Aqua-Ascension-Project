@@ -14,20 +14,20 @@ public class RaycastShooting : MonoBehaviour
     }
     private void Update()
     {
+        //shoots a raycast if the player left clicks
         if(Input.GetButtonDown("Fire1"))
         {
+            Debug.Log("button clicked"); 
             RaycastHit hit;
             if(Physics.Raycast(shootSpot.position, shootSpot.forward, out hit, rangeOfWeapon))
             {
-                Debug.Log("ray"); 
-                Gizmos.color = Color.blue; 
+                Debug.Log(hit.transform.name); 
                 Target target = hit.transform.GetComponent<Target>();
-                Vector3 dir = transform.TransformDirection(Vector3.forward) * rangeOfWeapon;
-                Gizmos.DrawRay(shootSpot.position, dir); 
-                if(target != null)
+                if (target != null)
                 {
-                    target.TakeDamage(damage); 
+                    target.TakeDamage(damage);
                 }
+                Vector3 dir = transform.TransformDirection(Vector3.forward) * rangeOfWeapon;
             }
         }
     }
