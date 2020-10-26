@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using AquaAscension.Utils;
+
 
 // This class creates rooms by procedurally linking components together.
 public struct Container
@@ -97,6 +99,13 @@ public class QuadTree
         }
     }
 
+    public static QuadTree GetEqualNeighbour(QuadTree self, Direction direction = Direction.N)
+    {
+        var neighbour = GetEqualOrGreaterNeighbour(self, direction);
+        if (neighbour == null || !self.HasSameArea(neighbour)) return null;
+        return neighbour;
+    }
+
     public static List<QuadTree> LevelTraversal(QuadTree node, int level = int.MaxValue)
     {
         if (node == null) return null;
@@ -113,10 +122,13 @@ public class QuadTree
         return quadTreeList;
     }
 
+    public static bool HasSameArea(QuadTree a, QuadTree b) => a.Area - 1 <= b.Area && a.Area + 1 >= b.Area;
+
     protected List<QuadTree> children;
     protected QuadTree parent;
 
     public RectInt Boundary { get; protected set; }
+    public int Area { get => Boundary.width * Boundary.height; }
     public bool IsLeaf { get => children == null || children.Count <= 0; }
     public bool HasParent { get => parent != null; }
 
@@ -127,7 +139,9 @@ public class QuadTree
         this.parent = parent;
     }
 
+    public bool HasSameArea(QuadTree other) => HasSameArea(this, other);
     public QuadTree GetEqualOrGreaterNeighbour(Direction direction = Direction.N) => GetEqualOrGreaterNeighbour(this, direction);
+    public QuadTree GetEqualNeighbour(Direction direction = Direction.N) => GetEqualNeighbour(this, direction);
     public List<QuadTree> LevelTraversal(int level = int.MaxValue) => LevelTraversal(this, level);
 
     public void DrawGizmos()
@@ -156,6 +170,17 @@ public class QuadTree
         children.Add(new QuadTree(new RectInt(Boundary.xMin + Boundary.width / 2, Boundary.yMin - Boundary.height / 2, Boundary.width / 2, Boundary.height / 2), this));
         children.Add(new QuadTree(new RectInt(Boundary.xMin - Boundary.width / 2, Boundary.yMin + Boundary.height / 2, Boundary.width / 2, Boundary.height / 2), this));
         children.Add(new QuadTree(new RectInt(Boundary.xMin + Boundary.width / 2, Boundary.yMin + Boundary.height / 2, Boundary.width / 2, Boundary.height / 2), this));
+    }
+
+    public void Flatten() => children.Clear();
+
+    /// <summary>
+    /// This function returns a rect pair  
+    /// </summary>
+    public (RectInt, RectInt) MergeNode(Direction direction)
+    {
+        var neighbour = GetEqualOrGreaterNeighbour(this, direction);
+        return (this.Boundary, neighbour.Boundary);
     }
 
     [System.Obsolete("This will give you unexpected values...")]
@@ -198,10 +223,8 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField] private RectInt room = new RectInt(0, 0, 100, 100);
     [SerializeField] private QuadTree root;
     [SerializeField] private List<QuadTree> quadTrees;
+    [SerializeField] private List<QuadTree> secondPass;
     [SerializeField] private int iterations = 4;
-
-    private QuadTree rtNode;
-    private QuadTree nNode;
 
     private void Start() => Generate();
 
@@ -211,10 +234,48 @@ public class RoomGenerator : MonoBehaviour
         root = new QuadTree(room);
         root.Generate(iterations);
         quadTrees.Clear();
-        quadTrees = QuadTree.LevelTraversal(root);
-        rtNode = quadTrees[50];
-        nNode = rtNode.GetEqualOrGreaterNeighbour();
-        //rtNode = root.GetNode(new Queue<QuadTree.Quadrant>(new[] { QuadTree.Quadrant.NE, QuadTree.Quadrant.SE, QuadTree.Quadrant.SW }));
+        quadTrees = root.LevelTraversal();
+
+        Debug.Log($"First pass count - {quadTrees.Count}");
+
+        // Nope, No, Nope. 
+        // secondPass = new List<QuadTree>();
+        // for (int i = quadTrees.Count - 1; i >= 0; --i)
+        // {
+        //     if (Rand.Chance(0.4f))
+        //     {
+        //         int length = Random.Range(1, 4);
+        //         var direction = (QuadTree.Direction)Random.Range(0, 5);
+        //         var node = quadTrees[Random.Range(0, quadTrees.Count)];
+        //         QuadTree[] neighbours = new QuadTree[length];
+        //         for (int j = length - 1; j >= 0; --j)
+        //             neighbours[j] = node.GetEqualNeighbour(direction);
+        //         if (neighbours.All(n => n != null))
+        //         {
+        //             RectInt newBounds = node.Boundary;
+        //             switch (direction)
+        //             {
+        //                 case QuadTree.Direction.N:
+        //                     newBounds.yMin = neighbours[neighbours.Length - 1].Boundary.yMin;
+        //                     break;
+        //                 case QuadTree.Direction.S:
+        //                     newBounds.yMax = neighbours[neighbours.Length - 1].Boundary.yMax;
+        //                     break;
+        //                 case QuadTree.Direction.W:
+        //                     newBounds.xMin = neighbours[neighbours.Length - 1].Boundary.xMin;
+        //                     break;
+        //                 case QuadTree.Direction.E:
+        //                     newBounds.xMax = neighbours[neighbours.Length - 1].Boundary.xMax;
+        //                     break;
+        //             }
+        //             if(root.Boundary.Contains(newBounds.position))
+        //                 secondPass.Add(new QuadTree(newBounds));
+        //         }
+        //     }
+        // }
+        // Debug.Log($"Second pass count - {secondPass.Count}");
+        // //secondPass = secondPass.Distinct().ToList();
+        // Debug.Log($"Second pass count after distinction - {secondPass.Count}");
     }
 
     public void OnRegenerate() => Generate();
@@ -222,8 +283,10 @@ public class RoomGenerator : MonoBehaviour
     private void OnDrawGizmos()
     {
         root.DrawGizmos();
-        Gizmos.color = Color.green;
-        rtNode?.DrawGizmos();
-        nNode?.DrawGizmos();
+        for (int i = secondPass.Count - 1; i >= 0; --i)
+        {
+            Gizmos.color = new Color(0f, 1f, (float)i / secondPass.Count);
+            secondPass[i].DrawGizmos();
+        }
     }
 }
