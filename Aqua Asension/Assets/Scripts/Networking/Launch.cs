@@ -7,19 +7,19 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
-[CustomEditor(typeof(Launch))]
-public class LaunchEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-
-        GUILayout.Space(10);
-
-        if(GUILayout.Button("Reset Player Prefs"))
-            PlayerPrefs.DeleteKey("Gamesettings_Nickname");
-    }
-}
+//[CustomEditor(typeof(Launch))]
+//public class LaunchEditor : Editor
+//{
+//    public override void OnInspectorGUI()
+//    {
+//        base.OnInspectorGUI();
+//
+//        GUILayout.Space(10);
+//
+//        if(GUILayout.Button("Reset Player Prefs"))
+//            PlayerPrefs.DeleteKey("Gamesettings_Nickname");
+//    }
+//}
 
 public class Launch : MonoBehaviourPunCallbacks
 {
@@ -43,7 +43,7 @@ public class Launch : MonoBehaviourPunCallbacks
     private void Start()
     {
         playerListContainer.gameObject.SetActive(false);
-
+        PhotonNetwork.AutomaticallySyncScene = true; 
         nickname = PlayerPrefs.GetString("Gamesettings_Nickname", "");
         if(!string.IsNullOrEmpty(nickname))
             ConnectToServer(nickname);
