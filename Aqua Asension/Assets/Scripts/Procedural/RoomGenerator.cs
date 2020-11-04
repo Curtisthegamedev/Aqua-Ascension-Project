@@ -5,17 +5,6 @@ using UnityEngine;
 using UnityEditor;
 using AquaAscension.Utils;
 
-
-// This class creates rooms by procedurally linking components together.
-public struct Container
-{
-    public dynamic x, y, w, h, padding;
-    public (dynamic, dynamic) Size { get => (w, h); set => (w, h) = value; }
-    public (dynamic, dynamic) Position { get => (x, y); set => (x, y) = value; }
-    public dynamic Area { get => w * h; }
-    public dynamic TotalArea { get => (w + padding) * (h + padding); }
-}
-
 [System.Serializable]
 public class QuadTree
 {
@@ -122,17 +111,17 @@ public class QuadTree
         return quadTreeList;
     }
 
-    public static bool HasSameArea(QuadTree a, QuadTree b) => a.Area - 1 <= b.Area && a.Area + 1 >= b.Area;
+    public static bool HasSameArea(QuadTree a, QuadTree b) => a.Area == b.Area;
 
     protected List<QuadTree> children;
     protected QuadTree parent;
 
-    public RectInt Boundary { get; protected set; }
-    public int Area { get => Boundary.width * Boundary.height; }
-    public bool IsLeaf { get => children == null || children.Count <= 0; }
+    public Rect Boundary { get; protected set; }
+    public float Area { get => Boundary.width * Boundary.height; }
+    public bool IsLeaf { get => children.Count <= 0; }
     public bool HasParent { get => parent != null; }
 
-    public QuadTree(RectInt boundary, QuadTree parent = null)
+    public QuadTree(Rect boundary, QuadTree parent = null)
     {
         this.children = new List<QuadTree>();
         this.Boundary = boundary;
@@ -144,6 +133,7 @@ public class QuadTree
     public QuadTree GetEqualNeighbour(Direction direction = Direction.N) => GetEqualNeighbour(this, direction);
     public List<QuadTree> LevelTraversal(int level = int.MaxValue) => LevelTraversal(this, level);
 
+    //! Fix Wire Drawing, use center, and width, height w/o multiplying by 2...
     public void DrawGizmos()
     {
         Gizmos.DrawWireCube(new Vector3(Boundary.x, Boundary.y), new Vector3(Boundary.width * 2, Boundary.height * 2));
@@ -166,10 +156,10 @@ public class QuadTree
 
     protected void Subdivide()
     {
-        children.Add(new QuadTree(new RectInt(Boundary.xMin - Boundary.width / 2, Boundary.yMin - Boundary.height / 2, Boundary.width / 2, Boundary.height / 2), this));
-        children.Add(new QuadTree(new RectInt(Boundary.xMin + Boundary.width / 2, Boundary.yMin - Boundary.height / 2, Boundary.width / 2, Boundary.height / 2), this));
-        children.Add(new QuadTree(new RectInt(Boundary.xMin - Boundary.width / 2, Boundary.yMin + Boundary.height / 2, Boundary.width / 2, Boundary.height / 2), this));
-        children.Add(new QuadTree(new RectInt(Boundary.xMin + Boundary.width / 2, Boundary.yMin + Boundary.height / 2, Boundary.width / 2, Boundary.height / 2), this));
+        children.Add(new QuadTree(new Rect(Boundary.xMin - Boundary.width / 2f, Boundary.yMin - Boundary.height / 2f, Boundary.width / 2f, Boundary.height / 2f), this));
+        children.Add(new QuadTree(new Rect(Boundary.xMin + Boundary.width / 2f, Boundary.yMin - Boundary.height / 2f, Boundary.width / 2f, Boundary.height / 2f), this));
+        children.Add(new QuadTree(new Rect(Boundary.xMin - Boundary.width / 2f, Boundary.yMin + Boundary.height / 2f, Boundary.width / 2f, Boundary.height / 2f), this));
+        children.Add(new QuadTree(new Rect(Boundary.xMin + Boundary.width / 2f, Boundary.yMin + Boundary.height / 2f, Boundary.width / 2f, Boundary.height / 2f), this));
     }
 
     public void Flatten() => children.Clear();
@@ -177,9 +167,9 @@ public class QuadTree
     /// <summary>
     /// This function returns a rect pair  
     /// </summary>
-    public (RectInt, RectInt) MergeNode(Direction direction)
+    public (Rect, Rect) MergeNode(Direction direction)
     {
-        var neighbour = GetEqualOrGreaterNeighbour(this, direction);
+        var neighbour = this.GetEqualNeighbour(direction);
         return (this.Boundary, neighbour.Boundary);
     }
 
@@ -217,76 +207,286 @@ public class RoomGeneratorEditor : Editor
 }
 #endif
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class RoomGenerator : MonoBehaviour
 {
+    [System.Serializable]
+    public sealed class Section
+    {
+        public enum Length : int
+        {
+            L1, L2, L3, L4
+        }
+
+        public enum Size : int
+        {
+            Small, Medium, Large
+        }
+
+        public Length length;
+        public Size size;
+        public List<GameObject> prefabs;
+        public float placementProbability;
+    }
+
+    public const int SUBDIVIDE_COUNT = 4;
+
+    //? Change This into its own class to define rooms;
     [SerializeField] private RectInt room = new RectInt(0, 0, 100, 100);
+    //[SerializeField] private int mergeCount = 4;
+
+    [Header("References")]
+    [SerializeField] private List<Section> sectionPrefabs;
+    [SerializeField] private Transform roomAnchor;
+
+    [Header("Debug")]
+    public bool showFirstPass = true;
+    public bool showSecondPass = false;
+    public bool showMergePass = false;
     [SerializeField] private QuadTree root;
-    [SerializeField] private List<QuadTree> quadTrees;
+    [SerializeField] private List<QuadTree> firstPass;
     [SerializeField] private List<QuadTree> secondPass;
-    [SerializeField] private int iterations = 4;
+    [SerializeField] private List<QuadTree> mergePass;
+
+    private QuadTree selectedNode;
+    private QuadTree compareNode;
+    private IEnumerator mergeCoroutine;
 
     private void Start() => Generate();
 
     private void Generate()
     {
         //TODO Get the Room size...
-        root = new QuadTree(room);
-        root.Generate(iterations);
-        quadTrees.Clear();
-        quadTrees = root.LevelTraversal();
+        root = new QuadTree(new Rect(room.x, room.y, room.width, room.height));
+        root.Generate(SUBDIVIDE_COUNT);
+        firstPass.Clear();
+        firstPass = root.LevelTraversal();
 
-        Debug.Log($"First pass count - {quadTrees.Count}");
+        Debug.Log($"First pass count - {firstPass.Count}");
 
-        // Nope, No, Nope. 
+        #region
         // secondPass = new List<QuadTree>();
-        // for (int i = quadTrees.Count - 1; i >= 0; --i)
+        // var u = Rand.Unique(0, quadTrees.Count, 4);
+        // for (int i = mergeCount - 1; i >= 0; --i)
         // {
-        //     if (Rand.Chance(0.4f))
+        //     var node = quadTrees[u[i]];
+        //     var newBounds = node.Boundary;
+        //     var dir = (QuadTree.Direction)Random.Range(0, 4);
+
+        //     //Get a Neighbour in a direction...
+        //     var n = node.GetEqualNeighbour();
+        //     if (n != null)
         //     {
-        //         int length = Random.Range(1, 4);
-        //         var direction = (QuadTree.Direction)Random.Range(0, 5);
-        //         var node = quadTrees[Random.Range(0, quadTrees.Count)];
-        //         QuadTree[] neighbours = new QuadTree[length];
-        //         for (int j = length - 1; j >= 0; --j)
-        //             neighbours[j] = node.GetEqualNeighbour(direction);
-        //         if (neighbours.All(n => n != null))
+        //         // switch (dir)
+        //         // {
+        //         //     case QuadTreeFloat.Direction.N:
+        //         //         newBounds.yMin = n.Boundary.yMin;
+        //         //         break;
+        //         //     case QuadTreeFloat.Direction.S:
+        //         //         newBounds.yMax = n.Boundary.yMax;
+        //         //         break;
+        //         //     case QuadTreeFloat.Direction.W:
+        //         //         newBounds.xMin = n.Boundary.xMin;
+        //         //         break;
+        //         //     case QuadTreeFloat.Direction.E:
+        //         //         newBounds.xMax = n.Boundary.xMax;
+        //         //         break;
+        //         // }   
+        //         switch (dir)
         //         {
-        //             RectInt newBounds = node.Boundary;
-        //             switch (direction)
-        //             {
-        //                 case QuadTree.Direction.N:
-        //                     newBounds.yMin = neighbours[neighbours.Length - 1].Boundary.yMin;
-        //                     break;
-        //                 case QuadTree.Direction.S:
-        //                     newBounds.yMax = neighbours[neighbours.Length - 1].Boundary.yMax;
-        //                     break;
-        //                 case QuadTree.Direction.W:
-        //                     newBounds.xMin = neighbours[neighbours.Length - 1].Boundary.xMin;
-        //                     break;
-        //                 case QuadTree.Direction.E:
-        //                     newBounds.xMax = neighbours[neighbours.Length - 1].Boundary.xMax;
-        //                     break;
-        //             }
-        //             if(root.Boundary.Contains(newBounds.position))
-        //                 secondPass.Add(new QuadTree(newBounds));
+        //             case QuadTree.Direction.N:
+        //                 newBounds.position = new Vector2(newBounds.position.x, newBounds.position.y + n.Boundary.position.y);
+        //                 newBounds.size = new Vector2(newBounds.size.x, newBounds.size.y + n.Boundary.size.y);
+        //                 break;
+        //             case QuadTree.Direction.S:
+        //                 newBounds.position = new Vector2(newBounds.position.x, newBounds.position.y - n.Boundary.position.y);
+        //                 newBounds.size = new Vector2(newBounds.size.x, newBounds.size.y + n.Boundary.size.y);
+        //                 break;
+        //             case QuadTree.Direction.W:
+        //                 newBounds.position = new Vector2(newBounds.position.x - n.Boundary.position.x, newBounds.position.y);
+        //                 newBounds.size = new Vector2(newBounds.size.x + n.Boundary.size.x, newBounds.size.y);
+        //                 break;
+        //             case QuadTree.Direction.E:
+        //                 newBounds.position = new Vector2(newBounds.position.x + n.Boundary.position.x, newBounds.position.y);
+        //                 newBounds.size = new Vector2(newBounds.size.x + n.Boundary.size.x, newBounds.size.y);
+        //                 break;
         //         }
+        //         secondPass.Add(new QuadTree(newBounds));
         //     }
+
+        //     // Get Nearest From N Neighbors in a direction...
+        //     // List<QuadTree> nearest = new List<QuadTree>();
+        //     // QuadTree next = node;
+        //     // var iter = 0;
+        //     // while (true)
+        //     // {
+        //     //     iter++;
+        //     //     next = next.GetEqualNeighbour(dir);
+        //     //     if (next == null || iter > 999) break;
+        //     //     nearest.Add(next);
+        //     // }
+        //     // if (nearest.Count <= 0) continue;
+        //     // var length = Random.Range(0, nearest.Count) - 1;
+        //     // length = length < 0 ? 0 : length;
+        //     // switch (dir)
+        //     // {
+        //     //     case QuadTree.Direction.N:
+        //     //         newBounds.yMin = nearest[length].Boundary.yMin;
+        //     //         break;
+        //     //     case QuadTree.Direction.S:
+        //     //         newBounds.yMax = nearest[length].Boundary.yMax;
+        //     //         break;
+        //     //     case QuadTree.Direction.W:
+        //     //         newBounds.xMin = nearest[length].Boundary.xMin;
+        //     //         break;
+        //     //     case QuadTree.Direction.E:
+        //     //         newBounds.xMax = nearest[length].Boundary.xMax;
+        //     //         break;
+        //     // }
+        //     // secondPass.Add(new QuadTree(newBounds));
         // }
         // Debug.Log($"Second pass count - {secondPass.Count}");
-        // //secondPass = secondPass.Distinct().ToList();
+        // secondPass = secondPass.Distinct().ToList();
         // Debug.Log($"Second pass count after distinction - {secondPass.Count}");
+        #endregion
+
+        // Nope, No, Nope. 
+        //! SecondPass and merging is broken.
+        secondPass = new List<QuadTree>();
+        for (int i = firstPass.Count - 1; i >= 0; --i)
+        {
+            if (Rand.Chance(0.2f))
+            {
+                int length = Random.Range(1, 5);
+                var direction = (QuadTree.Direction)Random.Range(0, 4);
+                var node = firstPass[Random.Range(0, firstPass.Count)];
+                QuadTree[] neighbors = new QuadTree[length];
+                for (int j = length - 1; j >= 0; --j)
+                    neighbors[j] = node.GetEqualNeighbour(direction);
+                if (neighbors.All(n => n != null))
+                {
+                    Rect newBounds = node.Boundary;
+                    switch (direction)
+                    {
+                        case QuadTree.Direction.N:
+                            newBounds.yMin = neighbors[neighbors.Length - 1].Boundary.yMin;
+                            break;
+                        case QuadTree.Direction.S:
+                            newBounds.yMax = neighbors[neighbors.Length - 1].Boundary.yMax;
+                            break;
+                        case QuadTree.Direction.W:
+                            newBounds.xMin = neighbors[neighbors.Length - 1].Boundary.xMin;
+                            break;
+                        case QuadTree.Direction.E:
+                            newBounds.xMax = neighbors[neighbors.Length - 1].Boundary.xMax;
+                            break;
+                    }
+                    if (!secondPass.Any(q => q.Boundary.Contains(newBounds.position) || q.Boundary.Contains(newBounds.position + newBounds.size) || q.Boundary.Contains(newBounds.center)))
+                        secondPass.Add(new QuadTree(newBounds));
+                }
+            }
+        }
+        Debug.Log($"Second pass count - {secondPass.Count}");
+        secondPass = secondPass.Distinct().ToList();
+        Debug.Log($"Second pass count after distinction - {secondPass.Count}");
+
+        //Merge();
+
+        Place();
+    }
+
+    private void Merge()
+    {
+        mergePass = new List<QuadTree>();
+        mergePass.AddRange(firstPass);
+        for (int i = secondPass.Count - 1; i >= 0; --i)
+        {
+            selectedNode = secondPass[i];
+            for (int j = firstPass.Count - 1; j >= 0; --j)
+            {
+                compareNode = firstPass[j];
+                var result = selectedNode.Boundary.Contains(compareNode.Boundary.center);
+                if (result)
+                {
+                    mergePass.Remove(compareNode);
+                }
+            }
+        }
+        mergePass.AddRange(secondPass);
+    }
+
+    private void Place()
+    {
+        if (EditorApplication.isPlaying)
+        {
+            for (int i = firstPass.Count - 1; i >= 0; --i)
+            {
+                var node = firstPass[i];
+                if (node.IsLeaf)
+                {
+                    if (node.Boundary.width <= room.width / 16f)
+                    {
+                        var section = sectionPrefabs.Where(s => s.size == Section.Size.Small).First();
+                        if (Rand.Chance(section.placementProbability))
+                        {
+                            var pos = node.Boundary.position;
+                            Instantiate(section.prefabs[Random.Range(0, section.prefabs.Count)], new Vector3(pos.x, roomAnchor.position.y, pos.y), Quaternion.identity, roomAnchor);
+                        }
+                    }
+                    else if (node.Boundary.width <= room.width / 8f)
+                    {
+                        var section = sectionPrefabs.Where(s => s.size == Section.Size.Medium).First();
+                        if (Rand.Chance(section.placementProbability))
+                        {
+                            var pos = node.Boundary.position;
+                            Instantiate(section.prefabs[Random.Range(0, section.prefabs.Count)], new Vector3(pos.x, roomAnchor.position.y, pos.y), Quaternion.identity, roomAnchor);
+                        }
+                    }
+                    else if (node.Boundary.width <= room.width / 4f)
+                    {
+                        var section = sectionPrefabs.Where(s => s.size == Section.Size.Large).First();
+                        if (Rand.Chance(section.placementProbability))
+                        {
+                            var pos = node.Boundary.position;
+                            Instantiate(section.prefabs[Random.Range(0, section.prefabs.Count)], new Vector3(pos.x, roomAnchor.position.y, pos.y), Quaternion.identity, roomAnchor);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void OnRegenerate() => Generate();
 
     private void OnDrawGizmos()
     {
-        root.DrawGizmos();
-        for (int i = secondPass.Count - 1; i >= 0; --i)
+        mergeCoroutine?.MoveNext();
+
+        if (showFirstPass)
         {
-            Gizmos.color = new Color(0f, 1f, (float)i / secondPass.Count);
-            secondPass[i].DrawGizmos();
+            Gizmos.color = Color.white;
+            root.DrawGizmos();
+        }
+
+        if (showSecondPass)
+        {
+            for (int i = secondPass.Count - 1; i >= 0; --i)
+            {
+                Gizmos.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), (float)i / secondPass.Count);
+                secondPass[i].DrawGizmos();
+            }
+        }
+
+        if (showMergePass)
+        {
+            Gizmos.color = Color.red;
+            selectedNode?.DrawGizmos();
+
+            Gizmos.color = Color.magenta;
+            compareNode?.DrawGizmos();
+
+            for (int i = mergePass.Count - 1; i >= 0; --i)
+                mergePass[i].DrawGizmos();
         }
     }
 }
