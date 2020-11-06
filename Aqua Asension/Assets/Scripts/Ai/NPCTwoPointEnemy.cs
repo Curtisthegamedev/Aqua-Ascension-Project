@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPCMove : MonoBehaviour
+public class NPCTwoPointEnemy : MonoBehaviour
 {
  [SerializeField] float angularVel = 45.0f;
     [SerializeField] Transform _destination;
