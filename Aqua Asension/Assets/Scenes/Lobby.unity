@@ -152,11 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2f501b8189cdad46b4c9fe7c181869e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnpoints:
-  - {fileID: 1787864818}
-  - {fileID: 846416566}
-  - {fileID: 1189731046}
-  - {fileID: 809818906}
 --- !u!4 &463443251
 Transform:
   m_ObjectHideFlags: 0
@@ -614,13 +609,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe41e03019977904aa707d4ed5b57cf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pvCache: {fileID: 0}
-  pv: {fileID: 0}
-  isGameLoaded: 0
-  Scene: 0
-  playersInRoomAmount: 0
-  playersInGameAmount: 0
-  myNumInRoom: 0
 --- !u!4 &580348946
 Transform:
   m_ObjectHideFlags: 0
@@ -1794,7 +1782,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 809818905}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 58.71045, y: -2.26, z: -54.77}
+  m_LocalPosition: {x: 58.71045, y: -2.26, z: -56.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2433,6 +2421,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PrefabPlayer: {fileID: 592938701234152188, guid: 8ebe13484d2e34c478ca83e234c62266, type: 3}
+  spawnLocationOne: {fileID: 0}
+  spawnLocationTwo: {fileID: 0}
+  spawnLocationThree: {fileID: 0}
+  spawnLocationFour: {fileID: 0}
 --- !u!1 &1554407434
 GameObject:
   m_ObjectHideFlags: 0
