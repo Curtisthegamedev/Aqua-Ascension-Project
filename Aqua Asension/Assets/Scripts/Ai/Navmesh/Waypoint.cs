@@ -10,3 +10,4 @@ public class Waypoint : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, debugDrawRadious);
     }
 }
+// https://youtu.be/5q4JHuJAAcQ?list=PL8lV_joQZ5sfqiNwoJcokJlcrgplW8uSs 
