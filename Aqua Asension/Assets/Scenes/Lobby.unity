@@ -2420,7 +2420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f447f20057d6d4b40beb8672a4ca25f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PrefabPlayer: {fileID: 592938701234152188, guid: 8ebe13484d2e34c478ca83e234c62266, type: 3}
+  PrefabPlayer: {fileID: 1892839355013253382, guid: af5dc7d9972a0224397c2f731052273e, type: 3}
   spawnLocationOne: {fileID: 0}
   spawnLocationTwo: {fileID: 0}
   spawnLocationThree: {fileID: 0}

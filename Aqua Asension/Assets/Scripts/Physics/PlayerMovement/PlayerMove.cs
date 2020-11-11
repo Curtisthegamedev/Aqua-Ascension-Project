@@ -21,6 +21,11 @@ public class PlayerMove : MonoBehaviourPunCallbacks
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
         controller = this.gameObject.GetComponent<CharacterController>();
+        //if(!photonView.IsMine)
+        //{
+        //    GetComponentInChildren<Camera>().enabled = false;
+        //    GetComponentInChildren<AudioListener>().enabled = false; 
+        //}
     }
     private void Update()
     {
@@ -51,8 +56,8 @@ public class PlayerMove : MonoBehaviourPunCallbacks
             {
                 verticalVelocity.y += -gravity * Time.deltaTime;
             }
-            controller.Move(MoveVector * Time.deltaTime);
             controller.Move(verticalVelocity * Time.deltaTime);
+            controller.Move(MoveVector * Time.deltaTime);
         }
     }
 }
