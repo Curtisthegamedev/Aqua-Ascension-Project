@@ -8,6 +8,7 @@ TagManager:
   - ParOne
   - ParTwo
   - StartGameButton
+  - Bullet
   layers:
   - Default
   - TransparentFX

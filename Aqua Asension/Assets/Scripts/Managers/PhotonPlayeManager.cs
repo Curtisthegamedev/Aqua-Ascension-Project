@@ -17,22 +17,22 @@ public class PhotonPlayeManager : MonoBehaviour
     {
         if(!firstPlayerSpawned && !secondPlayerSpawned && !ThirdPlayerSpawned)
         {
-            PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(70, -2, -39), Quaternion.identity);
+            PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(670, 10, -38), Quaternion.identity);
             firstPlayerSpawned = true; 
         }
         else if(firstPlayerSpawned && !secondPlayerSpawned && !ThirdPlayerSpawned)
         {
-            PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(70, -4, -56), Quaternion.identity);
+            PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(675, 10, -56), Quaternion.identity);
             secondPlayerSpawned = true; 
         }
         else if(firstPlayerSpawned && secondPlayerSpawned && !ThirdPlayerSpawned)
         {
-            PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(58, -2, -56), Quaternion.identity);
+            PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(680, 10, -56), Quaternion.identity);
             ThirdPlayerSpawned = true; 
         }
         else
         {
-            PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(57, -2, -38), Quaternion.identity); 
+            PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(665, 10, -38), Quaternion.identity); 
         }
     }
 }
