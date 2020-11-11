@@ -14,23 +14,30 @@ public class PlayerMove : MonoBehaviourPunCallbacks
     //this bullet prefab is temporary and should be replaced with water later on. 
     [SerializeField] GameObject tempBulletPrefab;
     private CharacterController controller;
+    [SerializeField] Transform FirePoint;
+    [SerializeField] GameObject TempBullet;
     Rigidbody rb;
-    float smoothVel;
+    float smoothVel = 0.1f;
 
     private void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
         controller = this.gameObject.GetComponent<CharacterController>();
-        //if(!photonView.IsMine)
-        //{
-        //    GetComponentInChildren<Camera>().enabled = false;
-        //    GetComponentInChildren<AudioListener>().enabled = false; 
-        //}
+        if(!photonView.IsMine)
+        {
+            GetComponentInChildren<Camera>().enabled = false;
+            GetComponentInChildren<AudioListener>().enabled = false; 
+        }
     }
     private void Update()
     {
         if(photonView.IsMine)
         {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Debug.Log("shooting");
+                Instantiate(TempBullet, FirePoint.position, FirePoint.rotation);
+            }
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
             Vector3 MoveVector = new Vector3(horizontal, 0.0f, vertical).normalized;
@@ -43,6 +50,7 @@ public class PlayerMove : MonoBehaviourPunCallbacks
                 controller.Move(moveDirection.normalized * speed * Time.deltaTime);
 
             }
+
 
             if (controller.isGrounded)
             {
