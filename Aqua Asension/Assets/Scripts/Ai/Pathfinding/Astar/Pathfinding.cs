@@ -7,7 +7,7 @@ public class Pathfinding : MonoBehaviour
     Grid grid;
     public Transform StartPosition;
     public Transform TargetPosition;
-
+   
     private void Awake()
     {
         grid = GetComponent<Grid>();
@@ -82,17 +82,26 @@ public class Pathfinding : MonoBehaviour
         List<Node> FinalPath = new List<Node>();
         Node currentNode = a_EndNode;
 
-        while(currentNode != a_StartNode)
+        while (currentNode != a_StartNode)
         {
             FinalPath.Add(currentNode);
             currentNode = currentNode.Parent;
+            OnDrawGizmos();
 
-                }
+            FinalPath.Reverse();
+            grid.FinalPath = FinalPath;
 
-        FinalPath.Reverse();
-        grid.FinalPath = FinalPath;
+
+ void OnDrawGizmos()
+        {
+                Gizmos.DrawCube(currentNode.Position, new Vector3(grid.gridWorldSize.x, 1, grid.gridWorldSize.y));
+                Gizmos.color = Color.red;
+            Gizmos.DrawCube(currentNode.Position, Vector3.one * (grid.nodeRadious - grid.Distance));
+        }
+
+
+        }
     }
-
     int GetManhattenDistance(Node a_nodeA, Node a_nodeB)
     {
 
@@ -101,4 +110,8 @@ public class Pathfinding : MonoBehaviour
 
         return ix + iy;
     }
+        
+       
+    
 }
+//https://youtu.be/AKKpPmxx07w

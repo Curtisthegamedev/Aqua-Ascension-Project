@@ -153,10 +153,10 @@ public class Grid : MonoBehaviour
                 {
                     Gizmos.color = Color.yellow;
                 }
-                if(FinalPath != null)
-                {
-                    Gizmos.color = Color.red;
-                }
+              //  if(FinalPath != null)
+               // {
+               //     Gizmos.color = Color.red;
+               // }
                 Gizmos.DrawCube(node.Position, Vector3.one * (nodeDiamiter - Distance));
             }
         }
@@ -164,3 +164,4 @@ public class Grid : MonoBehaviour
 
 
 }
+//https://youtu.be/AKKpPmxx07w
