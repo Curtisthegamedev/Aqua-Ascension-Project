@@ -1,18 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun; 
 
-public class Gun : MonoBehaviour
+public class Gun : MonoBehaviourPunCallbacks
 {
     [SerializeField] Transform FirePoint;
     [SerializeField] GameObject TempBullet;
 
     private void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if(photonView.IsMine)
         {
-            Debug.Log("shooting"); 
-            Instantiate(TempBullet, FirePoint.position, FirePoint.rotation); 
+            if (Input.GetButtonDown("Fire1"))
+            {
+                
+            }
         }
     }
+
+   
 }
