@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun; 
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviourPunCallbacks
 {
     private Rigidbody rb;
     private float speed = 3.0f; 
@@ -13,10 +14,13 @@ public class Bullet : MonoBehaviour
     }
     private void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag != "Player")
-        {
-            Destroy(this.gameObject); 
-        }
+            PhotonView view;  
+            view = col.gameObject.GetComponent<PhotonView>(); 
+            if(!view.IsMine && col.gameObject.tag == "Player")
+            {
+            col.gameObject.GetComponent<PlayerMove>().StunDamage(1); 
+            }
+        Destroy(this.gameObject); 
     }
 
     private void Update()

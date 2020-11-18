@@ -208,6 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edd4e3c33fcf1cf4a9ce046efd6792c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 2
   camTransform: {fileID: 5529698043747508006}
   WaterEffect: {fileID: 0}
   tempBulletPrefab: {fileID: 5506737365596744534, guid: d448f5ad5538f6941aafa1b584f9d7d5, type: 3}
@@ -327,7 +328,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 28db3e895dc0d1742b1dd9d3f37438a1, type: 2}
+  - {fileID: 2100000, guid: 52973764114a51c4db629d1ee8706632, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

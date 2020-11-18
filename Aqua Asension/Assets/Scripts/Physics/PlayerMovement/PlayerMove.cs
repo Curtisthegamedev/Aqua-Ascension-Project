@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun; 
 
-public class PlayerMove : MonoBehaviourPunCallbacks
+public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
 {
+    //Health and stun variables. 
+    public int health = 2; 
+
     private float speed = 5;
     private float gravity = 8.5f;
     private float jumpForce = 5.0f;
@@ -17,7 +20,14 @@ public class PlayerMove : MonoBehaviourPunCallbacks
     [SerializeField] Transform FirePoint;
     [SerializeField] GameObject TempBullet;
     Rigidbody rb;
-    float smoothVel = 0.1f;
+    float smoothVel = 0.1f; 
+
+    public void StunDamage(int damage)
+    {
+        health -= damage;
+        Debug.Log("health amount on hit character " + health); 
+
+    }
 
     private void Start()
     {
@@ -36,7 +46,7 @@ public class PlayerMove : MonoBehaviourPunCallbacks
             if (Input.GetButtonDown("Fire1"))
             {
                 Debug.Log("shooting");
-                Instantiate(TempBullet, FirePoint.position, FirePoint.rotation);
+                photonView.RPC("RPC_Shoot", RpcTarget.All);
             }
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
@@ -50,7 +60,6 @@ public class PlayerMove : MonoBehaviourPunCallbacks
                 controller.Move(moveDirection.normalized * speed * Time.deltaTime);
 
             }
-
 
             if (controller.isGrounded)
             {
@@ -66,6 +75,25 @@ public class PlayerMove : MonoBehaviourPunCallbacks
             }
             controller.Move(verticalVelocity * Time.deltaTime);
             controller.Move(MoveVector * Time.deltaTime);
+        }
+    }
+
+    [PunRPC]
+    void RPC_Shoot()
+    {
+        Debug.Log("shooting");
+        Instantiate(TempBullet, FirePoint.position, FirePoint.rotation);
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
+        {
+            stream.SendNext(health); 
+        }
+        else
+        {
+            health = (int)stream.ReceiveNext(); 
         }
     }
 }
