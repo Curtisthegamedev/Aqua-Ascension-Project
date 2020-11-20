@@ -409,7 +409,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: FindPath
 --- !u!222 &419685171
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -783,7 +783,7 @@ RectTransform:
   m_GameObject: {fileID: 1073709983}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.539, y: 1.539, z: 1.539}
   m_Children:
   - {fileID: 419685169}
   m_Father: {fileID: 1371975128}
@@ -915,7 +915,7 @@ RectTransform:
   m_GameObject: {fileID: 1327925339}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.539, y: 1.539, z: 1.539}
   m_Children:
   - {fileID: 146040728}
   m_Father: {fileID: 1371975128}
@@ -1215,7 +1215,7 @@ RectTransform:
   m_GameObject: {fileID: 1789042735}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.539, y: 1.539, z: 1.539}
   m_Children:
   - {fileID: 1809797277}
   m_Father: {fileID: 1371975128}
@@ -1428,7 +1428,7 @@ RectTransform:
   m_GameObject: {fileID: 2049790179}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.539, y: 1.539, z: 1.539}
   m_Children:
   - {fileID: 438620279}
   m_Father: {fileID: 1371975128}

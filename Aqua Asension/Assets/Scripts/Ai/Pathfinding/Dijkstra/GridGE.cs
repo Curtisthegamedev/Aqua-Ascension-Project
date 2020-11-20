@@ -30,6 +30,13 @@ public class GridGE : MonoBehaviour
             {
                 Transform node = Instantiate(nodePrefab, new Vector3((j * padding) + gameObject.transform.position.x, gameObject.transform.position.y, (i * padding) + gameObject.transform.position.z), Quaternion.identity);
                 node.name = "node (" + counter + ")";
+                if(counter % 7 == 0)
+                {
+                    node.GetComponent<NodeDJ>().walkable = false;
+                    
+                }
+
+
                 grid.Add(node);
                 counter++;
             }
