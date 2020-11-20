@@ -16,11 +16,10 @@ public class Bullet : MonoBehaviourPunCallbacks
     {
             PhotonView view;  
             view = col.gameObject.GetComponent<PhotonView>(); 
-            if(!view.IsMine && col.gameObject.tag == "Player")
+            if(col.gameObject.tag != "Player")
             {
-            col.gameObject.GetComponent<PlayerMove>().StunDamage(1); 
-            }
-        Destroy(this.gameObject); 
+            Destroy(this.gameObject); 
+            } 
     }
 
     private void Update()

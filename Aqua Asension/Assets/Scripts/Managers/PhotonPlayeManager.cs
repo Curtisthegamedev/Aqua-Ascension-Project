@@ -17,6 +17,7 @@ public class PhotonPlayeManager : MonoBehaviour
     {
         if(!firstPlayerSpawned && !secondPlayerSpawned && !ThirdPlayerSpawned)
         {
+            Debug.Log("playerspawn"); 
             PhotonNetwork.Instantiate(PrefabPlayer.name, new Vector3(670, 10, -38), Quaternion.identity);
             firstPlayerSpawned = true; 
         }
