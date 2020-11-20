@@ -8,9 +8,12 @@ public class NodeDJ : MonoBehaviour
     [SerializeField] private float weight = int.MaxValue;
     [SerializeField] private Transform parentNode = null;
     [SerializeField] private List<Transform> neighbourNode;
-    [SerializeField] private bool walkable = true;
-
+    [SerializeField] public bool walkable = true;
+   
+   
     
+
+
     void Start()
     {
         this.resetNode();

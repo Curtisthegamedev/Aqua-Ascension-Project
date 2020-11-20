@@ -266,7 +266,7 @@ public class PlayerInput : MonoBehaviour {
     }
 
    
-    private void colorBlockPath()
+    public void colorBlockPath()
     {
         foreach(Transform block in blockPath)
         {
