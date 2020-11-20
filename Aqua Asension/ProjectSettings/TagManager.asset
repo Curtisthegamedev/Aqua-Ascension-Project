@@ -9,6 +9,7 @@ TagManager:
   - ParTwo
   - StartGameButton
   - Bullet
+  - Node
   layers:
   - Default
   - TransparentFX
