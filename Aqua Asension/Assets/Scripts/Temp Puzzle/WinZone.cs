@@ -8,7 +8,6 @@ public class WinZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("entered"); 
         if(other.gameObject.tag == "Player")
         {
             WinCanvase.SetActive(true); 

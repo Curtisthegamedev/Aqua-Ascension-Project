@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoVertexSubtraction : MonoBehaviour
+/*public class DoVertexSubtraction : MonoBehaviour
 {
     //PrintVertexPositions vertexAScirpt;
     //PrintVertexB vertexBScript;
@@ -131,4 +131,4 @@ public class DoVertexSubtraction : MonoBehaviour
     {
         DoSubtraction(); 
     }
-}
+}*/
