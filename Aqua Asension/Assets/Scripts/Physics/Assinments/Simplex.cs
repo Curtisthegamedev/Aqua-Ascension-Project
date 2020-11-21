@@ -12,6 +12,7 @@ private GameObject ObjectB;
 
     Vector3 A;
     Vector3 B;
+    Vector3 C; 
     Vector3 AB;
     Vector3 AO;
     Vector3 O = new Vector3(0, 0, 0); 
@@ -524,107 +525,107 @@ private void Awake()
 
         if (Ap1 == true && Bp1 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
             ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
 
         }
         if (Ap1 == true && Bp2 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
 
         }
         if (Ap1 == true && Bp3 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
 
         }
         if (Ap1 == true && Bp3 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
-
         }
 
         if (Ap1 == true && Bp4 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
-
         }
         if (Ap2 == true && Bp1 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
-
         }
         if (Ap2 == true && Bp2 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
-
         }
         if (Ap2 == true && Bp3 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
 
         }
         if (Ap2 == true && Bp4 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
 
         }
         if (Ap3 == true && Bp1 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
 
         }
         if (Ap3 == true && Bp2 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
 
         }
 
         if (Ap3 == true && Bp3 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
 
         }
         if (Ap3 == true && Bp4 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
 
         }
         if (Ap4 == true && Bp1 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
 
         }
         if (Ap4 == true && Bp2 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
 
         }
         if (Ap4 == true && Bp3 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
 
         }
         if (Ap4 == true && Bp4 == true)
         {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+            C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
 
         }
+
+        Vector3 AC = C - -A;
+        Vector3 Normal = Vector3.Cross(AB, AC);
+        Vector3 Normal2 = -Normal; 
     }
 }
