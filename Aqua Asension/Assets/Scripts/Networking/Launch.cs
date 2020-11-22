@@ -23,8 +23,6 @@ using System.Linq;
 
 public class Launch : MonoBehaviourPunCallbacks
 {
-    [SerializeField] GameObject gameNumbers;
-    [SerializeField] GameObject canvasLoad;
     [SerializeField] GameObject canvasMainMenu;
     [SerializeField] GameObject canvasCreateLobby;
     [SerializeField] GameObject canvasJoinLobby;
