@@ -156,7 +156,7 @@ public class Launch : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(0);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)

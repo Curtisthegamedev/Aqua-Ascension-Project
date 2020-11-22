@@ -417,7 +417,7 @@ public class RoomGenerator : MonoBehaviour
 
     private void Place()
     {
-        if (EditorApplication.isPlaying)
+        //if (EditorApplication.isPlaying)
         {
             for (int i = firstPass.Count - 1; i >= 0; --i)
             {

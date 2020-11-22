@@ -67,7 +67,7 @@ public class PhotonPlayerManager : MonoBehaviour
         var position = spawn.position + new Vector3(0, offset, 0);
         
         GameObject player = PhotonNetwork.Instantiate(PrefabPlayer.name, position, Quaternion.identity);
-        player.name = NickName;
+        //player.name = NickName;
 
         spawnPoints.Add(spawn);
         spawnPoints.RemoveAt(0);
