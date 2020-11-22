@@ -21,6 +21,14 @@ using System.Linq;
 //    }
 //}
 
+/// <summary>
+/// Enum for different gamemodes/map/scene.
+/// </summary>
+public enum GameMode
+{
+    Arena, TeamedArena, Race, BattleRoyal
+}
+
 public class Launch : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject gameNumbers;
@@ -38,18 +46,23 @@ public class Launch : MonoBehaviourPunCallbacks
 
     List<string> playerNicknames = new List<string>();
 
-    public string nickname { get; set; } 
+    public string nickname { get; set; }
 
     private void Start()
     {
         playerListContainer.gameObject.SetActive(false);
-        PhotonNetwork.AutomaticallySyncScene = true; 
+        PhotonNetwork.AutomaticallySyncScene = true;
         nickname = PlayerPrefs.GetString("Gamesettings_Nickname", "");
-        if(!string.IsNullOrEmpty(nickname))
+        if (!string.IsNullOrEmpty(nickname))
             ConnectToServer(nickname);
-        else 
+        else
             enterNamePanel.gameObject.SetActive(true);
     }
+
+    ///////////////////////////////////
+    /// Private Functions
+    /////////////////////////////////
+    #region Private Functions
 
     private void ConnectToServer(string nickname)
     {
@@ -61,17 +74,17 @@ public class Launch : MonoBehaviourPunCallbacks
 
     private void CreateRoom()
     {
-        if(!PhotonNetwork.IsConnected) return;
+        if (!PhotonNetwork.IsConnected) return;
 
         RoomOptions options = new RoomOptions();
-        options.MaxPlayers = 3; // TODO : Change this to a higher player count;
+        options.MaxPlayers = 4; // TODO : Change this to a higher player count;
         PhotonNetwork.CreateRoom(null, options, null);
     }
 
     private void OnPlayerlistChanged()
     {
         ClearPlayerList();
-        for(var i = 0; i < playerNicknames.Count; i++)
+        for (var i = 0; i < playerNicknames.Count; i++)
         {
             var playerList = Instantiate(playerListPrefab, playerListPanel.transform);
             playerList.anchoredPosition = new Vector2(0, (-50 * i) - 25);
@@ -81,21 +94,31 @@ public class Launch : MonoBehaviourPunCallbacks
 
     private void ClearPlayerList()
     {
-        foreach(Transform child in playerListPanel.transform)
+        foreach (Transform child in playerListPanel.transform)
         {
             Destroy(child.gameObject);
         }
     }
 
+    private void LoadInstance(GameMode mode)
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            Debug.LogWarning("PhotonNetwork  is trying to load a level; however, we are not master client.");
+        Debug.Log($"PhotonNetwork - Loading Level: {mode}");
+        PhotonNetwork.LoadLevel(mode.ToString("F"));
+    }
+    #endregion
+
     ///////////////////////////////////
     /// PUN Callbacks
     /////////////////////////////////
+    #region PUN Callbacks
 
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to server.");
         Debug.Log($"Player Connected: {PhotonNetwork.LocalPlayer.NickName}");
-        
+
         //Connect To Random Room
         PhotonNetwork.JoinRandomRoom();
     }
@@ -122,7 +145,7 @@ public class Launch : MonoBehaviourPunCallbacks
         var names = PhotonNetwork.CurrentRoom.Players.Select(elem => elem.Value.NickName).ToArray();
         Debug.Log("Number of Players Connected: " + names.Length);
 
-        foreach(var name in names)
+        foreach (var name in names)
         {
             Debug.Log(name);
             playerNicknames.Add(name);
@@ -131,10 +154,15 @@ public class Launch : MonoBehaviourPunCallbacks
         OnPlayerlistChanged();
     }
 
+    public override void OnLeftRoom()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debug.LogError("Failed To create room: " + message, this.gameObject);
-        
+
         // TODO: Present Error To User...
         Application.Quit();
     }
@@ -147,15 +175,23 @@ public class Launch : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player player)
     {
-        Debug.Log("Player Entered Room...");
+        Debug.Log($"Player Entered Room: {player.NickName}");
         playerNicknames.Add(player.NickName);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogFormat($"Player Entered IsMasterClient {PhotonNetwork.IsMasterClient}"); // called before OnPlayerLeftRoom
+        }
         OnPlayerlistChanged();
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player player)
     {
-        Debug.Log("Player Left Room...");
+        Debug.Log($"Player Left Room: {player.NickName}");
         playerNicknames.Remove(player.NickName);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogFormat($"Player Left IsMasterClient {PhotonNetwork.IsMasterClient}"); // called before OnPlayerLeftRoom
+        }
         OnPlayerlistChanged();
     }
 
@@ -167,10 +203,12 @@ public class Launch : MonoBehaviourPunCallbacks
 
         // }
     }
+    #endregion
 
     ///////////////////////////////////
     /// Actions
     /////////////////////////////////
+    #region Actions
 
     public void CreateLobbyAction()
     {
@@ -186,7 +224,7 @@ public class Launch : MonoBehaviourPunCallbacks
     public void JoinLobbyAction()
     {
         canvasMainMenu.SetActive(false);
-        canvasJoinLobby.SetActive(true); 
+        canvasJoinLobby.SetActive(true);
     }
 
     public void JoinAction()
@@ -194,9 +232,14 @@ public class Launch : MonoBehaviourPunCallbacks
         SceneManager.LoadScene("Lobby");
     }
 
+    public void LeaveRoomAction()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
     public void ValidateAndConnectToServerAction()
     {
-        if(!IsValidName(nickname))
+        if (!IsValidName(nickname))
         {
             Debug.LogWarning("Name is not longer than 4 characters.");
             return;
@@ -204,11 +247,12 @@ public class Launch : MonoBehaviourPunCallbacks
 
         string namehash;
         int temp = 0;
-        do{
+        do
+        {
             namehash = nickname + "#" + GenerateHash();
-        } while(!IsNameAvailable(namehash) && temp++ < 9999);
+        } while (!IsNameAvailable(namehash) && temp++ < 9999);
 
-        if(temp > 9999)
+        if (temp > 9999)
         {
             Debug.LogWarning("Name + Hash is not available", this.gameObject);
             return;
@@ -219,17 +263,19 @@ public class Launch : MonoBehaviourPunCallbacks
         enterNamePanel.gameObject.SetActive(false);
         ConnectToServer(namehash);
     }
+    #endregion
 
     ///////////////////////////////////
     /// Misc
     /////////////////////////////////
+    #region Misc
 
     /// <summary>
     /// Generates a String 4 Digit Hash.
     /// </summary>
     protected string GenerateHash()
     {
-        return Random.Range(0, 9999).ToString("D4"); 
+        return Random.Range(0, 9999).ToString("D4");
     }
 
     // TODO: Check if name is not offensive...or...not...
@@ -242,4 +288,5 @@ public class Launch : MonoBehaviourPunCallbacks
     {
         return true;
     }
+    #endregion
 }

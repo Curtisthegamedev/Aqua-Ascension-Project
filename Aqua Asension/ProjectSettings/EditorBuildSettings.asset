@@ -12,10 +12,10 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Menu_Juriel/Menu_Juriel.unity
+    path: Assets/Scenes/Brainstorm/Menu_Juriel/Menu_Juriel.unity
     guid: 8776956f677c8be4bad89ac7210f2356
   - enabled: 1
-    path: Assets/Scenes/TestPuzzle.unity
+    path: Assets/Scenes/Brainstorm/TestPuzzle.unity
     guid: 791cf2bd88774f64cbbadaf363d05d55
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
