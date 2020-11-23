@@ -107,7 +107,7 @@ public class Launch : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("Connected to lobby.");
-        canvasLoad.SetActive(false);
+        //canvasLoad.SetActive(false);
         canvasMainMenu.SetActive(true);
     }
 

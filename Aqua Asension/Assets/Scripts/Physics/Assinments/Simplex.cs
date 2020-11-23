@@ -5,33 +5,38 @@ using UnityEngine;
 
 public class Simplex : MonoBehaviour
 {
-private GameObject ObjectA;
-private GameObject ObjectB;
+    private GameObject ObjectA;
+    private GameObject ObjectB;
     Vector3 D;
-    Vector3 dirTwo; 
+    Vector3 dirTwo;
 
     Vector3 A;
     Vector3 B;
-    Vector3 C; 
+    Vector3 C;
+    Vector3 DD;
+
     Vector3 AB;
     Vector3 AC;
     Vector3 AO;
-    Vector3 O = new Vector3(0, 0, 0); 
+    Vector3 O = new Vector3(0, 0, 0);
 
-private void Awake()
-{
-    ObjectA = GameObject.FindGameObjectWithTag("ParOne");
-    ObjectB = GameObject.FindGameObjectWithTag("ParTwo");
+    private void Awake()
+    {
+        ObjectA = GameObject.FindGameObjectWithTag("ParOne");
+        ObjectB = GameObject.FindGameObjectWithTag("ParTwo");
         Debug.Log("First object is: " + ObjectA);
-        Debug.Log("Second object is: " + ObjectB); 
-}
+        Debug.Log("Second object is: " + ObjectB);
+    }
     void Update()
     {
 
 
 
         FirstPoint();
-        SecondPoint(); 
+        SecondPoint();
+        ThirdPoint();
+        Forthpoint();
+        Final(); 
     }
 
     public void FirstPoint()
@@ -143,9 +148,9 @@ private void Awake()
         }
 
         //finding minkowski difference. 
-        if(Ap1 == true && Bp1 == true)
+        if (Ap1 == true && Bp1 == true)
         {
-            A =  ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
             ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
 
         }
@@ -247,7 +252,7 @@ private void Awake()
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
 
         }
-        
+
     }
 
     //Use the oposite direction
@@ -621,12 +626,449 @@ private void Awake()
         if (Ap4q == true && Bp4q == true)
         {
             C = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
 
         }
 
         Vector3 AC = C - -A;
         Vector3 Normal = Vector3.Cross(AB, AC);
-        Vector3 Normal2 = -Normal; 
+        Vector3 Normal2 = -Normal;
+
     }
+
+
+
+//Finding new direction of D
+public void Forthpoint()
+{
+
+
+
+
+    Vector3 N;
+    Vector3 N1;
+    Vector3 N2;
+    Vector3 T;
+    Vector3 TO;
+    Vector3 DiT;
+
+    bool APt1 = false;
+    bool APt2 = false;
+    bool APt3 = false;
+    bool APt4 = false;
+
+    bool BPt1 = false;
+    bool BPt2 = false;
+    bool BPt3 = false;
+    bool BPt4 = false;
+
+    AC = C - -A;
+    //find the normal of AB , AC.  (A,B,and C are the three other points from above)
+    N.x = AB.x * AC.x;
+    N.y = AB.y * AC.y;
+    N.z = AB.z * AC.z;
+    N1 = N;
+    N2 = -N;
+
+
+    T.x = (A.x + B.x + C.x) / 3;
+    T.y = (A.y + B.y + C.y) / 3;
+    T.z = (A.z + B.z + C.z) / 3;
+    TO = -T;
+
+    //DiT is equal to the closest point to the origin
+    float N1T;
+    float N2T;
+
+    N1T = (N1.x * TO.x) + (N1.y * TO.y) + (N1.z * TO.z);
+    N2T = (N2.x * TO.x) + (N2.y * TO.y) + (N2.z * TO.z);
+
+    if (N1T < 0 && N1T < N2T)
+    {
+
+        DiT = N1;
+
+    }
+    else
+    {
+
+        DiT = N2;
+
+    }
+
+    //Find p1
+
+    float AT1 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.x * DiT.x) +
+        (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.y * DiT.y) +
+        (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.z * DiT.z);
+
+    float AT2 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.x * DiT.x) +
+        (ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.y * DiT.y) +
+        (ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.z * DiT.z);
+
+    float AT3 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS.x * DiT.x) +
+        (ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS.y * DiT.y) +
+        (ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS.z * DiT.z);
+
+    float AT4 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.x * DiT.x) +
+        (ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.y * DiT.y) +
+        (ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.z * DiT.z);
+
+    if (AT1 > AT2 && AT1 > AT3 && AT1 > AT4)
+    {
+        APt1 = true;
+    }
+    if (AT2 > AT1 && AT2 > AT3 && AT2 > AT4)
+    {
+        APt2 = true;
+    }
+
+    if (AT3 > AT2 && AT3 > AT1 && AT3 > AT4)
+    {
+        APt3 = true;
+    }
+
+    if (AT4 > AT2 && AT4 > AT3 && AT4 > AT1)
+    {
+        APt4 = true;
+    }
+
+
+
+
+    //find p2
+    float BT1 = (ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS.x * DiT.x) +
+      (ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS.y * DiT.y) +
+      (ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS.z * DiT.z);
+
+    float BT2 = (ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS.x * DiT.x) +
+        (ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS.y * DiT.y) +
+        (ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS.z * DiT.z);
+
+    float BT3 = (ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS.x * DiT.x) +
+        (ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS.y * DiT.y) +
+        (ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS.z * DiT.z);
+
+    float BT4 = (ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS.x * DiT.x) +
+        (ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS.y * DiT.y) +
+        (ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS.z * DiT.z);
+
+    if (BT1 < BT2 && BT1 < BT3 && BT1 < BT4)
+    {
+        BPt1 = true;
+    }
+    if (BT2 < BT1 && BT2 < BT3 && BT2 < BT4)
+    {
+        BPt2 = true;
+    }
+
+    if (BT3 < BT2 && BT3 < BT1 && BT3 < BT4)
+    {
+        BPt3 = true;
+    }
+
+    if (BT4 < BT2 && BT4 < BT3 && BT4 < BT1)
+    {
+        BPt4 = true;
+    }
+
+
+    if (APt1 == true && BPt1 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+        ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
+
+    }
+    if (APt1 == true && BPt2 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
+
+    }
+    if (APt1 == true && BPt3 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
+
+    }
+    if (APt1 == true && BPt4 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
+
+    }
+    if (APt2 == true && BPt1 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
+
+    }
+    if (APt2 == true && BPt2 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
+
+    }
+    if (APt2 == true && BPt3 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
+
+    }
+    if (APt2 == true && BPt4 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
+
+    }
+    if (APt3 == true && BPt1 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
+
+    }
+    if (APt3 == true && BPt2 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
+
+    }
+
+    if (APt3 == true && BPt3 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
+
+    }
+    if (APt3 == true && BPt4 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
+
+    }
+    if (APt4 == true && BPt1 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
+
+    }
+    if (APt4 == true && BPt2 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
+
+    }
+    if (APt4 == true && BPt3 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
+
+    }
+    if (APt4 == true && BPt4 == true)
+    {
+        DD = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
+                    ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
+
+    }
+
+
+
 }
+
+    //matracies good Luck
+    public void Final()
+    {
+        float DV0 = (A.x * (B.y * ((C.z * 1) - (1 * DD.z)) - (B.z * ((C.y * 1) - (1 * DD.y))) + (1 * ((C.y * DD.z) - (DD.y * C.z))))
+            - (A.y * (B.x * ((C.z * 1) - (DD.z * 1)) - B.z * (C.x * 1 - DD.x * 1) + (1 * (DD.x * C.z - DD.z * C.x))))
+            + (A.z * (B.x * ((C.y * 1) - (DD.y * 1)) - (B.y * ((C.x * 1) - (DD.x * 1))) + 1 * ((C.x * DD.y) - (C.y * DD.x))))
+            - (1 * (B.x * ((C.y * DD.z) - (C.z * DD.y)) - (B.y * ((C.x * DD.z) - (C.z * DD.x))) + (B.z * ((C.x * DD.y) - (C.y * DD.x))))));
+
+        float DVA = (0 * (B.y * ((C.z * 1) - (1 * DD.z)) - (B.z * ((C.y * 1) - (1 * DD.y))) + (1 * ((C.y * DD.z) - (DD.y * C.z))))
+         - (0 * (B.x * ((C.z * 1) - (DD.z * 1)) - B.z * (C.x * 1 - DD.x * 1) + (1 * (DD.x * C.z - DD.z * C.x))))
+         + (0 * (B.x * ((C.y * 1) - (DD.y * 1)) - (B.y * ((C.x * 1) - (DD.x * 1))) + 1 * ((C.x * DD.y) - (C.y * DD.x))))
+         - (1 * (B.x * ((C.y * DD.z) - (C.z * DD.y)) - (B.y * ((C.x * DD.z) - (C.z * DD.x))) + (B.z * ((C.x * DD.y) - (C.y * DD.x))))));
+
+
+        float DVB = (A.x * (0 * ((C.z * 1) - (1 * DD.z)) - (0 * ((C.y * 1) - (1 * DD.y))) + (1 * ((C.y * DD.z) - (DD.y * C.z))))
+           - (A.y * (0 * ((C.z * 1) - (DD.z * 1)) - 0 * (C.x * 1 - DD.x * 1) + (1 * (DD.x * C.z - DD.z * C.x))))
+           + (A.z * (0 * ((C.y * 1) - (DD.y * 1)) - (0 * ((C.x * 1) - (DD.x * 1))) + 1 * ((C.x * DD.y) - (C.y * DD.x))))
+           - (1 * (0 * ((C.y * DD.z) - (C.z * DD.y)) - (0 * ((C.x * DD.z) - (C.z * DD.x))) + (0 * ((C.x * DD.y) - (C.y * DD.x))))));
+
+
+        float DVC = (A.x * (B.y * ((0 * 1) - (1 * DD.z)) - (B.z * ((0 * 1) - (1 * DD.y))) + (1 * ((0 * DD.z) - (DD.y * 0))))
+           - (A.y * (B.x * ((0 * 1) - (DD.z * 1)) - B.z * (0 * 1 - DD.x * 1) + (1 * (DD.x * 0 - DD.z * 0))))
+           + (A.z * (B.x * ((0 * 1) - (DD.y * 1)) - (B.y * ((0 * 1) - (DD.x * 1))) + 1 * ((0 * DD.y) - (0 * DD.x))))
+           - (1 * (B.x * ((0 * DD.z) - (0 * DD.y)) - (B.y * ((0 * DD.z) - (0 * DD.x))) + (B.z * ((0 * DD.y) - (0 * DD.x))))));
+
+        float DVD = (A.x * (B.y * ((C.z * 1) - (1 * 0)) - (B.z * ((C.y * 1) - (1 * 0))) + (1 * ((C.y * 0) - (0 * C.z))))
+           - (A.y * (B.x * ((C.z * 1) - (0 * 1)) - B.z * (C.x * 1 - 0 * 1) + (1 * (0 * C.z - 0 * C.x))))
+           + (A.z * (B.x * ((C.y * 1) - (0 * 1)) - (B.y * ((C.x * 1) - (0 * 1))) + 1 * ((C.x * 0) - (C.y * 0))))
+           - (1 * (B.x * ((C.y * 0) - (C.z * 0)) - (B.y * ((C.x * 0) - (C.z * 0))) + (B.z * ((C.x * 0) - (C.y * 0))))));
+
+
+        if (DV0 < 0)
+        {
+            if (DVA < 0 && DVB > 0 && DVC > 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0 and A");
+            }
+
+            if (DVA > 0 && DVB < 0 && DVC > 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0 and B");
+            }
+            if (DVA > 0 && DVB > 0 && DVC < 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0 and C");
+            }
+            if (DVA > 0 && DVB > 0 && DVC > 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0 and D");
+            }
+
+
+
+            if (DVA < 0 && DVB < 0 && DVC > 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A, and B");
+            }
+            if (DVA < 0 && DVB > 0 && DVC < 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A and C");
+            }
+
+            if (DVA < 0 && DVB > 0 && DVC > 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A,D");
+            }
+
+            if (DVA > 0 && DVB < 0 && DVC > 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, B,D");
+            }
+            if (DVA > 0 && DVB < 0 && DVC < 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, B,C");
+            }
+            if (DVA > 0 && DVB > 0 && DVC < 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, C,D");
+            }
+
+
+
+
+            if (DVA < 0 && DVB < 0 && DVC < 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A, B, C");
+            }
+            if (DVA < 0 && DVB < 0 && DVC > 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A, B, D");
+            }
+            if (DVA < 0 && DVB > 0 && DVC < 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A, D, C");
+            }
+            if (DVA > 0 && DVB < 0 && DVC < 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, D, B, C");
+            }
+
+            if (DVA < 0 && DVB < 0 && DVC < 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of all points");
+            }
+
+            if (DVA > 0 && DVB > 0 && DVC > 0 && DVD > 0)
+            {
+                Debug.Log("point of oragin is point " + DV0);
+            }
+        }
+        else
+        {
+
+            if (DVA > 0 && DVB < 0 && DVC < 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0 and A");
+            }
+
+            if (DVA < 0 && DVB > 0 && DVC < 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0 and B");
+            }
+            if (DVA < 0 && DVB < 0 && DVC > 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0 and C");
+            }
+            if (DVA < 0 && DVB < 0 && DVC < 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0 and D");
+            }
+
+
+
+            if (DVA < 0 && DVB < 0 && DVC > 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, C, and D");
+            }
+            if (DVA < 0 && DVB > 0 && DVC < 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, B and D");
+            }
+
+            if (DVA < 0 && DVB > 0 && DVC > 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, C,B");
+            }
+
+            if (DVA > 0 && DVB < 0 && DVC > 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A,C");
+            }
+            if (DVA > 0 && DVB < 0 && DVC < 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A,D");
+            }
+            if (DVA > 0 && DVB > 0 && DVC < 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A,B");
+            }
+
+
+
+
+            if (DVA > 0 && DVB > 0 && DVC > 0 && DVD < 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A, B, C");
+            }
+            if (DVA > 0 && DVB > 0 && DVC < 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A, B, D");
+            }
+            if (DVA > 0 && DVB < 0 && DVC > 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, A, D, C");
+            }
+            if (DVA < 0 && DVB > 0 && DVC > 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of 0, D, B, C");
+            }
+
+            if (DVA > 0 && DVB > 0 && DVC > 0 && DVD > 0)
+            {
+                Debug.Log("point of origin is inside the boundury of all points");
+            }
+            if(DVA < 0 && DVB < 0 && DVC < 0 && DVD < 0)
+            {
+                Debug.Log("point of oragin is point " + DV0); 
+            }
+
+        }
+
+    }
+
+}
+
+
