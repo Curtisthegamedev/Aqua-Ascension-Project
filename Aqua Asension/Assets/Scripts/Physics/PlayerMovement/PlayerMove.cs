@@ -8,7 +8,7 @@ public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
     //Health and stun variables. 
     public int health = 2; 
 
-    private float speed = 5;
+    private float speed = 20;
     private float gravity = 8.5f;
     private float jumpForce = 5.0f;
     private Vector3 verticalVelocity;
@@ -82,7 +82,8 @@ public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
     void RPC_Shoot()
     {
         Debug.Log("shooting");
-        Instantiate(TempBullet, FirePoint.position, FirePoint.rotation);
+        Bullet bullet = Instantiate(TempBullet, FirePoint.position, FirePoint.rotation).GetComponent<Bullet>();
+        bullet.Initialize(speed * Time.deltaTime); 
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

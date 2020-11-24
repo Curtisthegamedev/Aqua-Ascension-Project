@@ -6,24 +6,33 @@ using Photon.Pun;
 public class Bullet : MonoBehaviourPunCallbacks
 {
     private Rigidbody rb;
-    private float speed = 3.0f; 
+    private float speed = 100.0f; 
 
     private void Awake()
     {
         rb = this.gameObject.GetComponent<Rigidbody>(); 
     }
+
+    public void Initialize(float playerSpeed)
+    {
+        rb.AddForce(transform.forward * speed, ForceMode.Impulse); 
+    }
     private void OnCollisionEnter(Collision col)
     {
-            PhotonView view;  
-            view = col.gameObject.GetComponent<PhotonView>(); 
-            if(col.gameObject.tag != "Player")
-            {
+        var enemyPlayerHealth = col.gameObject.GetComponent<Health>(); 
+        if(enemyPlayerHealth)
+        {
+            enemyPlayerHealth.DamageHealth(25);
             Destroy(this.gameObject); 
-            } 
+        }
+        else
+        {
+            Destroy(this.gameObject); 
+        }
     }
 
     private void Update()
     {
-        rb.AddForce(transform.forward * speed); 
+         
     }
 }
