@@ -7,8 +7,8 @@ public class LockControl : MonoBehaviour
     private int[] result, correctCombination;
     private void Start()
     {
-        result = new int[] { 0, 0, 0 };
-        correctCombination = new int[] { 6, 6, 6 }; //haha, this is temporary, we will make it randomly generate every time the room is generated with this puzzle!
+        result = new int[] { 0, 0, 0, 0 };
+        correctCombination = new int[] { 0, 6, 6, 6 }; //haha, this is temporary, we will make it randomly generate every time the room is generated with this puzzle!
         Rotate.Rotated += CheckResults;
     }
 

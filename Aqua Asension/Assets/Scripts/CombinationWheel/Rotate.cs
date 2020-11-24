@@ -31,7 +31,7 @@ public class Rotate : MonoBehaviour
 
         for (int i = 0; i <= 11; i++)
         {
-            transform.Rotate(0f, 0f, -3f);
+            transform.Rotate(0f, 0f, 3f);
             yield return new WaitForSeconds(0.01f);
         }
 
