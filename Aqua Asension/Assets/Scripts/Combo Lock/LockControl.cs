@@ -8,7 +8,8 @@ public class LockControl : Switch
     private void Start()
     {
         result = new int[] { 0, 0, 0, 0 };
-        correctCombination = new int[] { 0, 6, 6, 6 }; //haha, this is temporary, we will make it randomly generate every time the room is generated with this puzzle!
+        correctCombination = new int[] { Random.Range(0, 9), Random.Range(0, 9), Random.Range(0, 9), Random.Range(0, 9) };
+        Debug.Log("Combination is: " + correctCombination[0] + correctCombination[1] + correctCombination[2] + correctCombination[3]);
         Rotate.Rotated += CheckResults;
     }
 
