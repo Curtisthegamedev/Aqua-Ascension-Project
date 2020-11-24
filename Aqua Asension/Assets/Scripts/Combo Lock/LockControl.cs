@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LockControl : MonoBehaviour
+public class LockControl : Switch
 {
     private int[] result, correctCombination;
     private void Start()
@@ -36,6 +36,12 @@ public class LockControl : MonoBehaviour
         if (result[0] == correctCombination[0] && result[1] == correctCombination[1] && result[2] == correctCombination[2] && result[3] == correctCombination[3])
         {
             Debug.Log("Correct Combination has been entered!"); //this is also temporary, this would trigger the event of providing the player with the weapon upgrade or unlocking the next level!
+            Unlocked(true);
+        }
+        else if (unlocked == true && (result[0] != correctCombination[0] || result[1] != correctCombination[1] || result[2] != correctCombination[2] || result[3] != correctCombination[3]))
+        {
+            Debug.Log("Oops! We went from the Correct Combination to an Incorrect Combination!");
+            Unlocked(false);
         }
     }
 
