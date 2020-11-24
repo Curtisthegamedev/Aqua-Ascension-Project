@@ -11,6 +11,7 @@ public class Buttons : MonoBehaviour
     {
         startGameButton = GameObject.FindGameObjectWithTag("StartGameButton");
     }
+    
     public void OnClick_StartGame()
     {
         Debug.Log(startGameButton.name);
