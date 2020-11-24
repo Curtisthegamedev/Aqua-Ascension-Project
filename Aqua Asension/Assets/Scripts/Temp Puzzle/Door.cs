@@ -6,7 +6,6 @@ public class Door : MonoBehaviour
 {
     [SerializeField] Switch sw;
     Vector3 pos;
-    public static bool unlocked = false;
     private void Start()
     {
         pos = transform.position; 

@@ -17,15 +17,19 @@ public class Rotate : MonoBehaviour
         numberShown = 0;
     }
 
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
-        if (coroutineAllowed)
+        if (Input.GetButtonDown("Fire2") && coroutineAllowed)
         {
-            StartCoroutine("RotateWheel");
+            StartCoroutine("RotateDown");
+        }
+        if (Input.GetButtonDown("Fire3") && coroutineAllowed)
+        {
+            StartCoroutine("RotateUp");
         }
     }
 
-    private IEnumerator RotateWheel()
+    private IEnumerator RotateDown()
     {
         coroutineAllowed = false;
 
@@ -42,6 +46,30 @@ public class Rotate : MonoBehaviour
         if (numberShown > 9)
         {
             numberShown = 0;
+        }
+
+        Debug.Log(numberShown);
+
+        Rotated(name, numberShown);
+    }
+
+    private IEnumerator RotateUp()
+    {
+        coroutineAllowed = false;
+
+        for (int i = 0; i <= 11; i++)
+        {
+            transform.Rotate(0f, 0f, -3f);
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        coroutineAllowed = true;
+
+        numberShown -= 1;
+
+        if (numberShown < 0)
+        {
+            numberShown = 9;
         }
 
         Debug.Log(numberShown);
