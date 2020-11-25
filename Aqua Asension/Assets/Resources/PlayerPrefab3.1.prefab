@@ -3122,6 +3122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myHealth: 100
   healthBar: {fileID: 8921610106751929900}
+  spawnPoints: []
 --- !u!1 &3483318081137635277
 GameObject:
   m_ObjectHideFlags: 0
