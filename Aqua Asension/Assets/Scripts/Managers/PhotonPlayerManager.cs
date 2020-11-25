@@ -7,17 +7,6 @@ using Photon.Realtime;
 
 public class PhotonPlayerManager : MonoBehaviour
 {
-    public class PlayerSpawnInfo
-    {
-        public Player Player { get; set; }
-        public bool Spawned { get; internal set; }
-
-        public PlayerSpawnInfo(Player player)
-        {
-            Player = player;
-        }
-    }
-
     [Header("References")]
     [SerializeField] GameObject PrefabPlayer;
     [SerializeField] Transform spawnPointsContainer;
