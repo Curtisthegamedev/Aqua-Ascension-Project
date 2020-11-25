@@ -17,22 +17,14 @@ public class Bullet : MonoBehaviourPunCallbacks
     {
         rb.AddForce(transform.forward * speed, ForceMode.Impulse); 
     }
+
     private void OnCollisionEnter(Collision col)
     {
         var enemyPlayerHealth = col.gameObject.GetComponent<Health>(); 
         if(enemyPlayerHealth)
         {
             enemyPlayerHealth.DamageHealth(25);
-            Destroy(this.gameObject); 
         }
-        else
-        {
-            Destroy(this.gameObject); 
-        }
-    }
-
-    private void Update()
-    {
-         
+        Destroy(this.gameObject); 
     }
 }

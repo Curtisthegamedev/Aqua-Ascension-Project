@@ -81,7 +81,6 @@ public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     void RPC_Shoot()
     {
-        Debug.Log("shooting");
         Bullet bullet = Instantiate(TempBullet, FirePoint.position, FirePoint.rotation).GetComponent<Bullet>();
         bullet.Initialize(speed * Time.deltaTime); 
     }

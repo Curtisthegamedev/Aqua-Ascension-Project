@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
@@ -7,53 +8,53 @@ using UnityEngine.Events;
 
 public class Health : MonoBehaviourPunCallbacks, IPunObservable
 {
-    public int myHealth = 100;
+    [SerializeField] int maxHealth = 100;
     [SerializeField] Image healthBar;
-    private Transform SpawnContainer;
-    [SerializeField] List<Transform> spawnPoints = new List<Transform>();
-    UnityEvent <GameObject>respawnEvent; 
 
-    public void Initialize(UnityEvent <GameObject>RespawnEvent)
-    {
-        respawnEvent = RespawnEvent;
-    }
+    List<Transform> spawnPoints = new List<Transform>();
+    int health;
+    float offset;
 
-    private void Start()
+    public void Start()
     {
-        SpawnContainer = GameObject.FindGameObjectWithTag("SpawnContainer").transform; 
-        foreach (Transform child in SpawnContainer)
-            spawnPoints.Add(child); 
+        ResetHealth();
+
+        Transform container = GameObject.FindGameObjectWithTag("SpawnContainer").transform;
+        foreach(Transform spawn in container)
+            spawnPoints.Add(spawn);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if(stream.IsWriting)
         {
-            stream.SendNext(myHealth); 
+            stream.SendNext(health); 
         }
         else
         {
-            myHealth = (int)stream.ReceiveNext(); 
+            health = (int)stream.ReceiveNext(); 
         }
     }
-
    
     public void DamageHealth(int damage)
     {
-        myHealth -= damage;
-        Debug.Log("PlayerHealth is:" + myHealth);
-        healthBar.fillAmount = myHealth; 
-        if(myHealth <= 0)
+        health -= damage;
+        Debug.Log("PlayerHealth is:" + health);
+        healthBar.fillAmount = health; 
+        if(health <= 0)
         {
-            respawnEvent?.Invoke(this.gameObject);
-            Debug.Assert(respawnEvent != null); 
+            //TODO: Update GameManager...
+            Respawn();
         }
     }
 
-    public void ResetHealth()
-    {
-        myHealth = 100; 
-    }
-
+    public void ResetHealth() => health = maxHealth; 
     
+    public void Respawn()
+    {
+        var spawn = spawnPoints[Random.Range(0, spawnPoints.Count)];
+        var position = spawn.position;
+        transform.position = position;
+        ResetHealth();
+    }
 }
