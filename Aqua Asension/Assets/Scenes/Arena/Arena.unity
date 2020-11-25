@@ -459,6 +459,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1777590387527534703, guid: 97036776360a5cc48bbc1873a25cd3e2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2614435795994615876, guid: 97036776360a5cc48bbc1873a25cd3e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -546,6 +550,10 @@ PrefabInstance:
     - target: {fileID: 2614435795994615877, guid: 97036776360a5cc48bbc1873a25cd3e2, type: 3}
       propertyPath: m_Name
       value: ArenaUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 2725883370407303620, guid: 97036776360a5cc48bbc1873a25cd3e2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97036776360a5cc48bbc1873a25cd3e2, type: 3}
