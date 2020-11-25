@@ -10,6 +10,8 @@ TagManager:
   - StartGameButton
   - Bullet
   - Node
+  - SpawnPoint
+  - SpawnContainer
   layers:
   - Default
   - TransparentFX
