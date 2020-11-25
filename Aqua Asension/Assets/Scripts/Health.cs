@@ -9,7 +9,8 @@ using UnityEngine.Events;
 public class Health : MonoBehaviourPunCallbacks, IPunObservable
 {
     [SerializeField] int maxHealth = 100;
-    [SerializeField] Image healthBar;
+    //[SerializeField] Image healthBar;
+    [SerializeField] Transform bar; 
 
     List<Transform> spawnPoints = new List<Transform>();
     int health;
@@ -18,6 +19,7 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     public void Start()
     {
         ResetHealth();
+        
 
         Transform container = GameObject.FindGameObjectWithTag("SpawnContainer").transform;
         foreach(Transform spawn in container)
@@ -40,8 +42,8 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     {
         health -= damage;
         Debug.Log("PlayerHealth is:" + health);
-        healthBar.fillAmount = health; 
-        if(health <= 0)
+        bar.localScale = new Vector3(health, 1f); 
+        if (health <= 0)
         {
             //TODO: Update GameManager...
             Respawn();
