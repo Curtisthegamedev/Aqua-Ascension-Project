@@ -29,9 +29,6 @@ public class Simplex : MonoBehaviour
     }
     void Update()
     {
-
-
-
         FirstPoint();
         SecondPoint();
         ThirdPoint();
@@ -45,9 +42,7 @@ public class Simplex : MonoBehaviour
         bool Bp1 = false; bool Bp2 = false; bool Bp3 = false; bool Bp4 = false; bool Bp5 = false;
 
         float X1 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.x + ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.x +
-            ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS.x + ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.x) / 4;
-
-        //Debug.Log("x1 is: " + X1); 
+            ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS.x + ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.x) / 4; 
 
         float Y1 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.y + ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.y +
             ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS.y + ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.y) / 4;
@@ -906,6 +901,11 @@ public void Forthpoint()
            + (A.z * (B.x * ((C.y * 1) - (0 * 1)) - (B.y * ((C.x * 1) - (0 * 1))) + 1 * ((C.x * 0) - (C.y * 0))))
            - (1 * (B.x * ((C.y * 0) - (C.z * 0)) - (B.y * ((C.x * 0) - (C.z * 0))) + (B.z * ((C.x * 0) - (C.y * 0))))));
 
+        Debug.Log("float DV0 " + DV0);
+        Debug.Log("float DVA " + DVA);
+        Debug.Log("float DVB " + DVB);
+        Debug.Log("float DVC " + DVC);
+        Debug.Log("float DVD " + DVD); 
 
         if (DV0 < 0)
         {
@@ -1062,7 +1062,7 @@ public void Forthpoint()
             }
             if(DVA < 0 && DVB < 0 && DVC < 0 && DVD < 0)
             {
-                Debug.Log("point of oragin is point " + DV0); 
+                Debug.Log("point of origin is point " + DV0); 
             }
 
         }
