@@ -21,7 +21,7 @@ public class PrintVertexPositions : MonoBehaviour
         vertexPos1 = mesh.vertices[0];
         vertexPos2 = mesh.vertices[1];
         vertexPos3 = mesh.vertices[2];
-        vertexPos4 = mesh.vertices[3];
+        vertexPos4 = mesh.vertices[4];
 
         vertexPos1WS = transform.TransformPoint(vertexPos1);
         vertexPos2WS = transform.TransformPoint(vertexPos2);

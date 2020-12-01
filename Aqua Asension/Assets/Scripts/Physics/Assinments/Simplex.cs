@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq; 
 
 
 public class Simplex : MonoBehaviour
@@ -40,7 +41,9 @@ public class Simplex : MonoBehaviour
     {
         bool Ap1 = false; bool Ap2 = false; bool Ap3 = false; bool Ap4 = false; bool Ap5 = false;
         bool Bp1 = false; bool Bp2 = false; bool Bp3 = false; bool Bp4 = false; bool Bp5 = false;
+        //get x y z for dir in object a. 
 
+        List<float> ObjectAValues = new List<float>() { 0, 0, 0 }; 
         float X1 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.x + ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.x +
             ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS.x + ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.x) / 4; 
 
@@ -49,9 +52,9 @@ public class Simplex : MonoBehaviour
 
         float Z1 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.z + ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.z +
             ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS.z + ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.z) / 4;
+        
 
-
-
+        //get x y z for dir in object b.
         float X2 = (ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS.x + ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS.x +
                    ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS.x + ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS.x) / 4;
 
@@ -63,11 +66,12 @@ public class Simplex : MonoBehaviour
 
         //The direction
         D = new Vector3(X2 - X1, Y2 - Y1, Z2 - Z1);
+        Debug.Log("direction is " + D);
 
         //find dot product for each vertex with direction. 
-        float AD1 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.x * D.x) +
-            (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.y * D.y) +
-            (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.z * D.z);
+        float AD1 = DotPoduct(ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.x,
+            ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.y,
+            ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.z, D); 
 
         float AD2 = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.x * D.x) +
             (ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS.y * D.y) +
@@ -81,12 +85,25 @@ public class Simplex : MonoBehaviour
             (ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.y * D.y) +
             (ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS.z * D.z);
 
+        /*for(int i = 1; i <= 4; i++)
+        {
+            List<float> VertexDotProducts[i] = (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.x * D.x) +
+            (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.y * D.y) +
+            (ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS.z * D.z);
+        }*/
 
-        //find the frist point by calculation Minkowski difference
+        Debug.Log("ad1 " + AD1 + "Ad2 " + AD2 + "ad3 " + AD3 + "ad4 " + AD4);
+        //find the frist point by calculation Minkowski difference 
+        float[] ADValues = { AD1, AD2, AD3, AD4 };  
+        
+        /*for(int i = 0; i < 4; i++)
+        {
+            ADValues[i]
+        }*/
+        //use arry to return maximum and minimum
         if (AD1 > AD2 && AD1 > AD3 && AD1 > AD4)
         {
             Ap1 = true;
-
         }
         if (AD2 > AD1 && AD2 > AD3 && AD2 > AD4)
         {
@@ -120,26 +137,34 @@ public class Simplex : MonoBehaviour
             (ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS.y * D.y) +
             (ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS.z * D.z);
 
+        List<float> BDValues = new List<float>() { BD1, BD2, BD3, BD4 };
+        float BD = BDValues.Max(); 
+        //Debug.Log("bd1 " + BD1 + "bd2" + BD2 + "bd3" + BD3 + "bd4" + BD4); 
         //find second point
         if (BD1 < BD2 && BD1 < BD3 && BD1 < BD4)
         {
             Bp1 = true;
-
+            
         }
         if (BD2 < BD1 && BD2 < BD3 && BD2 < BD4)
         {
             Bp2 = true;
-
+            
         }
         if (AD3 < BD2 && BD3 < BD1 && BD3 < BD4)
         {
             Bp3 = true;
-
+            
         }
         if (BD4 < BD2 && BD4 < BD3 && BD4 < BD1)
         {
             Bp4 = true;
-
+            
+        }
+        if (BD1 == BD2 && BD3 == BD4 && BD1 > BD3 && BD1 > BD4)
+        {
+            Bp1 = true;
+            
         }
 
         //finding minkowski difference. 
@@ -147,67 +172,69 @@ public class Simplex : MonoBehaviour
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
             ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
-
+            
         }
         if (Ap1 == true && Bp2 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
+            
 
         }
         if (Ap1 == true && Bp3 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
+            
 
         }
-        if (Ap1 == true && Bp3 == true)
-        {
-            A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
-                        ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
-
-        }
-
         if (Ap1 == true && Bp4 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos1WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
+            
 
         }
         if (Ap2 == true && Bp1 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
+            
 
         }
         if (Ap2 == true && Bp2 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
+            
 
         }
         if (Ap2 == true && Bp3 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
+            
 
         }
         if (Ap2 == true && Bp4 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos2WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
+            
 
         }
         if (Ap3 == true && Bp1 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
+            
 
         }
         if (Ap3 == true && Bp2 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
+            
 
         }
 
@@ -215,39 +242,45 @@ public class Simplex : MonoBehaviour
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
+            
 
         }
         if (Ap3 == true && Bp4 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos3WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
+            
 
         }
         if (Ap4 == true && Bp1 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB1WS;
+            
 
         }
         if (Ap4 == true && Bp2 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB2WS;
+            
 
         }
         if (Ap4 == true && Bp3 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB3WS;
+            
 
         }
         if (Ap4 == true && Bp4 == true)
         {
             A = ObjectA.GetComponent<PrintVertexPositions>().vertexPos4WS -
                         ObjectB.GetComponent<PrintVertexB>().vertexPosB4WS;
+            
 
         }
-
+        //temp note all of these are evaluating false. 
     }
 
     //Use the oposite direction
@@ -901,11 +934,11 @@ public void Forthpoint()
            + (A.z * (B.x * ((C.y * 1) - (0 * 1)) - (B.y * ((C.x * 1) - (0 * 1))) + 1 * ((C.x * 0) - (C.y * 0))))
            - (1 * (B.x * ((C.y * 0) - (C.z * 0)) - (B.y * ((C.x * 0) - (C.z * 0))) + (B.z * ((C.x * 0) - (C.y * 0))))));
 
-        Debug.Log("float DV0 " + DV0);
-        Debug.Log("float DVA " + DVA);
-        Debug.Log("float DVB " + DVB);
-        Debug.Log("float DVC " + DVC);
-        Debug.Log("float DVD " + DVD); 
+        //Debug.Log("float DV0 " + DV0);
+        //Debug.Log("float DVA " + DVA);
+        //Debug.Log("float DVB " + DVB);
+        //Debug.Log("float DVC " + DVC);
+        //Debug.Log("float DVD " + DVD); 
 
         if (DV0 < 0)
         {
@@ -1067,6 +1100,13 @@ public void Forthpoint()
 
         }
 
+    }
+
+    private float DotPoduct(float x, float y, float z, Vector3 VectorToDot)
+    {
+        float Result = (x * VectorToDot.x) + (y * VectorToDot.y) + (z * VectorToDot.z);
+
+        return Result; 
     }
 
 }
