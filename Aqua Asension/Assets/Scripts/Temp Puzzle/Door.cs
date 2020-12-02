@@ -6,7 +6,6 @@ public class Door : MonoBehaviour
 {
     [SerializeField] Switch sw;
     Vector3 pos;
-    float time = 30; 
     private void Start()
     {
         pos = transform.position; 
@@ -14,11 +13,10 @@ public class Door : MonoBehaviour
 
     private void Update()
     {
-        if(sw.WasHit && time > 0)
+        if(sw.Open)
         {
             pos.y += 0.1f;
             transform.position = pos;
-            time -= 0; 
         }
     }
 }
