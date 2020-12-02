@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class Switch : MonoBehaviour
 {
-    public bool WasHit = false;
+    public bool Open = false;
+    public static bool unlocked = false;
 
     private void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag == "Bullet")
+        if(col.gameObject.tag == "Bullet" && unlocked)
         {
-            WasHit = true; 
+            Open = true;
         }
+    }
+
+    public void Unlocked(bool open)
+    {
+        unlocked = open;
+        Debug.Log("Door.cs unlocked =" + open);
     }
 }

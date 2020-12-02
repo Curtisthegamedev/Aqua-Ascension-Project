@@ -45,7 +45,6 @@ public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (Input.GetButtonDown("Fire1"))
             {
-                Debug.Log("shooting");
                 photonView.RPC("RPC_Shoot", RpcTarget.All);
             }
             float horizontal = Input.GetAxisRaw("Horizontal");
