@@ -10,6 +10,7 @@ TagManager:
   - StartGameButton
   - Bullet
   - Node
+  - Point
   layers:
   - Default
   - TransparentFX
