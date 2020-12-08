@@ -42,11 +42,12 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     {
         health -= damage;
         Debug.Log("PlayerHealth is:" + health);
-        bar.localScale = new Vector3(health, 1f); 
+        bar.localScale = new Vector3((float)health/100, 1f); 
         if (health <= 0)
         {
             //TODO: Update GameManager...
             Respawn();
+            bar.localScale = new Vector3((float)health / 100, 1f); 
         }
     }
 
@@ -54,9 +55,11 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     
     public void Respawn()
     {
+        GetComponent<CharacterController>().enabled = false; 
         var spawn = spawnPoints[Random.Range(0, spawnPoints.Count)];
         var position = spawn.position;
         transform.position = position;
+        GetComponent<CharacterController>().enabled = true; 
         ResetHealth();
     }
 }

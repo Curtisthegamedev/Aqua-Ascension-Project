@@ -3153,7 +3153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  bar: {fileID: 5203685730651976310}
+  bar: {fileID: 2060813763038115908}
 --- !u!1 &3483318081137635277
 GameObject:
   m_ObjectHideFlags: 0
