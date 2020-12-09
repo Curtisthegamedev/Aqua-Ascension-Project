@@ -14,7 +14,6 @@ public class DeathMatchTimer : MonoBehaviour
     private void Start()
     {
         timeLeft = startTime;
-        Debug.Log("text: " + CoundownText); 
     }
 
     private void Update()

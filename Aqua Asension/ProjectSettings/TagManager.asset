@@ -12,6 +12,8 @@ TagManager:
   - Node
   - SpawnPoint
   - SpawnContainer
+  - MyScore
+  - EnemyScore
   layers:
   - Default
   - TransparentFX
