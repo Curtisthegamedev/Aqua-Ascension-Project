@@ -6,10 +6,9 @@ using TMPro;
 
 public class DeathMatchTimer : MonoBehaviour
 {
-    private float timeLeft = 60f;
+    public static float timeLeft = 60f;
     private float startTime = 60f;
-    [SerializeField] GameObject CoundownText;
-    [SerializeField] GameObject GameEndText; 
+    [SerializeField] GameObject CoundownText; 
 
     private void Start()
     {
@@ -23,7 +22,7 @@ public class DeathMatchTimer : MonoBehaviour
 
         if(timeLeft < 0)
         {
-            GameEndText.SetActive(true); 
+            CoundownText.SetActive(false);
         }
     }
 }

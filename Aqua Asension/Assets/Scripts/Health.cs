@@ -21,10 +21,12 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     private int EnemyHighestScore = 0;
     [SerializeField] TextMeshProUGUI MyScoreText;
     [SerializeField] TextMeshProUGUI EnemyHighestScoreText;
+    [SerializeField] TextMeshProUGUI WinOrLoseText; 
 
     List<Transform> spawnPoints = new List<Transform>();
     int health;
     float offset;
+    private bool GameDone = false; 
 
     private void Awake()
     {
@@ -62,21 +64,24 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
         bar.localScale = new Vector3((float)health/100, 1f); 
         if (health <= 0)
         {
-            if(photonView.IsMine)
+            Respawn();
+            bar.localScale = new Vector3((float)health / 100, 1f);
+
+            if (photonView.IsMine)
             {
                 //TODO: Update GameManager...
-                Respawn();
-                bar.localScale = new Vector3((float)health / 100, 1f);
-                photonView.RPC("RPC_OnPlayerDeath", RpcTarget.All);
+                
+                //photonView.RPC("RPC_OnPlayerDeath", RpcTarget.All);
+                OnPlayerDeath(); 
                 photonView.RPC("RPC_OnPlayerDeathChangeScoreEnemy", RpcTarget.Others);
             }
-            
+            UpdateMyScoreText();
         }
-        UpdateMyScoreText(); 
+         
     }
 
-    [PunRPC]
-    void RPC_OnPlayerDeath()
+    //[PunRPC]
+    private void OnPlayerDeath()
     {
         //if(photonView.IsMine)
         //{
@@ -112,5 +117,35 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
         transform.position = position;
         GetComponent<CharacterController>().enabled = true; 
         ResetHealth();
+    }
+
+    private void ConvertScoreText()
+    {
+        MyScoreText.ToString(); 
+    }
+
+    private void Update()
+    {
+        if(DeathMatchTimer.timeLeft <= 0 && !GameDone)
+        {
+            if(int.Parse(MyScoreText.text) > int.Parse(EnemyHighestScoreText.text) && photonView.IsMine)
+            {
+                WinOrLoseText.gameObject.SetActive(true); 
+                WinOrLoseText.text = "You Win"; 
+            }
+
+            if(int.Parse(EnemyHighestScoreText.text) > int.Parse(MyScoreText.text) && photonView.IsMine)
+            {
+                WinOrLoseText.gameObject.SetActive(true); 
+                WinOrLoseText.text = "You Lose"; 
+            }
+
+            if(EnemyHighestScoreText.text == MyScoreText.text && photonView.IsMine)
+            {
+                WinOrLoseText.gameObject.SetActive(true); 
+                WinOrLoseText.text = "Tie"; 
+            }
+            GameDone = true; 
+        }
     }
 }
