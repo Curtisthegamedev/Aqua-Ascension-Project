@@ -3216,6 +3216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 2
+  jumpForce: 5
   camTransform: {fileID: 5529698043747508006}
   WaterEffect: {fileID: 0}
   tempBulletPrefab: {fileID: 5506737365596744534, guid: d448f5ad5538f6941aafa1b584f9d7d5, type: 3}

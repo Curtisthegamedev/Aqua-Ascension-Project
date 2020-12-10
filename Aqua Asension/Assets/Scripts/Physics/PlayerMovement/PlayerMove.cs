@@ -10,7 +10,7 @@ public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
 
     private float speed = 20;
     private float gravity = 8.5f;
-    private float jumpForce = 5.0f;
+    public float jumpForce = 5.0f;
     private Vector3 verticalVelocity;
     [SerializeField] Transform camTransform;
     [SerializeField] GameObject WaterEffect;

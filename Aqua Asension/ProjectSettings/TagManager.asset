@@ -14,6 +14,8 @@ TagManager:
   - SpawnContainer
   - MyScore
   - EnemyScore
+  - Water
+  - JumpPower
   layers:
   - Default
   - TransparentFX
