@@ -4,18 +4,25 @@ using UnityEngine;
 
 public class Bouyancy : MonoBehaviour
 {
-    private Rigidbody rb;
-    private float LiquidDesity = 3000.0f;
-    private float volume = 1.0f;
-    private Vector3 Boyancy; 
+    public static Bouyancy instance;
 
-    private void Start()
+    private float speed = 1.0f;
+    private float amp = 1.0f;
+    private float offset = 0.0f;
+    private float length = 2.0f;
+
+
+    private void Awake()
     {
-        rb = this.gameObject.GetComponent<Rigidbody>();
+        if(instance = null)
+        {
+            instance = this; 
+        }
+        else if(instance != this)
+        {
+            Destroy(this); 
+        }
     }
 
-    private void Update()
-    {
-        Boyancy = LiquidDesity * volume; 
-    }
+
 }
