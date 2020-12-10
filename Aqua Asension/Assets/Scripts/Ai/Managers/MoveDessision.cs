@@ -8,9 +8,11 @@ public class MoveDessision : MonoBehaviour
 
     public enum PreformAction
     {
-        WAIT, MOVE
+        WAIT, MOVE, PLAYER
     }
     public PreformAction MS;
+
+    [SerializeField] GameObject TargetPlayer;
 
     [SerializeField] bool StallMove;
 
@@ -21,18 +23,19 @@ public class MoveDessision : MonoBehaviour
     [SerializeField] List<Waypoint> patrolpoint;
 
     NavMeshAgent navMeshAgent;
-
+    bool tur = false;
 
     int currentPatrolIndex;
     bool move;
     
     bool patrolF;
     float waitimmer;
+    bool player;
 
     // Start is called before the first frame update
     public void Start()
     {
-       
+        player = false;
         navMeshAgent = this.GetComponent<NavMeshAgent>();
         if (navMeshAgent == null)
         {
@@ -58,10 +61,13 @@ public class MoveDessision : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        
+        Vector3 NP = TargetPlayer.transform.position;
+        Vector3 TP = navMeshAgent.transform.position;
         switch (MS)
         {
             case (PreformAction.MOVE):
+            
+
     if (move && navMeshAgent.remainingDistance <= 1.0f)
         {
 
@@ -74,10 +80,14 @@ public class MoveDessision : MonoBehaviour
                     MS = PreformAction.WAIT;
 
         }
+                if (TP.x - NP.x <= 5 && TP.x - NP.x >= -5 && TP.z - NP.z <= 5 && TP.z - NP.z >= -5) {
 
 
+                    MS = PreformAction.PLAYER;
 
+                }
                 
+
                 break;
 
 
@@ -95,15 +105,63 @@ public class MoveDessision : MonoBehaviour
              
               
                 break;
+
+
+            case (PreformAction.PLAYER):
+
+                navMeshAgent.SetDestination(NP);
+
+
+
+                if (move && navMeshAgent.remainingDistance <= 1.0f)
+                        {
+
+                          Destroy(TargetPlayer);
+                  
+                            ChangePatrolPoint();
+                            SetDestination();
+                          MS = PreformAction.MOVE;
+                         }
+
+
+
+                    
+
+
+
+                
+               
+
+                    break;
         }
-        
 
 
+      
            
        
     }
 
-    private void SetDestination()
+    private void play()
+    {
+
+
+        void OnTriggerStay(Collider collision)
+        {
+            Debug.Log("collision triggered");
+            if (collision.gameObject.CompareTag("Player"))
+            {
+
+
+                MS = PreformAction.PLAYER;
+
+            }
+
+
+
+        }
+    }
+
+        private void SetDestination()
     {
         if (patrolpoint != null)
         {
